@@ -1,0 +1,18 @@
+# Macro File
+
+#set deadlayer 
+
+/TwoCoax/det/HPGe2/setCrystalHalfLength 24.95 mm
+/TwoCoax/det/HPGe2/setCrystalRad  43.9 mm
+/TwoCoax/det/HPGe2/setCrystalEndRad 8 mm
+/TwoCoax/det/HPGe2/setHoleRad 4.3 mm
+/TwoCoax/det/HPGe2/setHoleDepth 35.7 mm
+
+/TwoCoax/det/HPGe2/setDeadLayer 1.726 mm
+
+/TwoCoax/det/HPGe2/setShellHalfLength 52.5 mm
+/TwoCoax/det/HPGe2/setEndGap 4.0 mm
+/TwoCoax/det/HPGe2/setWindowThick 2.54 mm
+/TwoCoax/det/HPGe2/setWallThick 1.5 mm
+
+/TwoCoax/det/update

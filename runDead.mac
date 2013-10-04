@@ -1,0 +1,9 @@
+# Macro File
+
+#set deadlayer 
+/TwoCoax/det/HPGe2/setDeadLayer {dl} um
+/TwoCoax/det/update
+#set file name 
+/TwoCoax/run/fileName eff{dl}um
+#run 1000000 events
+/run/beamOn 1000000 

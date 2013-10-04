@@ -1,0 +1,18 @@
+# Macro File
+
+#turn off visulizer
+/vis/disable
+#only print ever 10000 events
+/TwoCoax/event/printModulo 10000
+#set energy
+/gps/energy 661.657 keV
+#set detector distance
+/TwoCoax/det/setDetectorDistance 24.9 cm
+#set detector distance
+/TwoCoax/gun/rndm on
+#update
+/TwoCoax/det/update
+
+#loop over energy values
+/control/loop runDead.mac dl 700 1300 100 
+
