@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/PrimaryGeneratorMessenger.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorMessenger.hh"
@@ -14,9 +17,11 @@
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun)
 :Action(Gun)
 {
+  //Directory
   gunDir = new G4UIdirectory("/TwoCoax/gun/");
   gunDir->SetGuidance("PrimaryGenerator control");
    
+  //switch between GPS and custom gun enent generator
   RndmCmd = new G4UIcmdWithAString("/TwoCoax/gun/rndm",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");
   RndmCmd->SetGuidance(" Choice : on(default), off");
@@ -25,17 +30,20 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun
   RndmCmd->SetCandidates("on off");
   RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  //change the number of gammas
   numGammaCmd = new G4UIcmdWithAnInteger("/TwoCoax/gun/numGamma",this);
   numGammaCmd->SetGuidance("Set the number of Gammas shot");
   numGammaCmd->SetParameterName("Number",false);
   numGammaCmd->SetRange("Number>0&&Number<5");
   
+  //change the r position of the source
   PositionRCmd = new G4UIcmdWithADoubleAndUnit("/TwoCoax/gun/positionR",this);
   PositionRCmd->SetGuidance("Set the position of the source along R");
   PositionRCmd->SetParameterName("Size",false);
   PositionRCmd->SetUnitCategory("Length");
   PositionRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  // change the energy of the gamma (up to 4)
   for (int i=0; i<4;i++){
     G4String dir = "/TwoCoax/gun/energy"+G4UIcommand::ConvertToString(i+1);
     G4String guid = "Set energy of gamma "+G4UIcommand::ConvertToString(i+1);
@@ -55,6 +63,11 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
   delete RndmCmd;
+  delete numGammaCmd;
+  delete PositionRCmd;
+  for (int i=0; i<4;i++){
+    delete energyCmd[i];
+  }
   delete gunDir;
 }
 
@@ -62,18 +75,20 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if( command == RndmCmd )
-    { Action->SetRndmFlag(newValue);}
-  if( command == numGammaCmd)
-    { Action->SetNumGamma(numGammaCmd->GetNewIntValue(newValue));}
-  if( command == PositionRCmd)
-    { Action->SetPositionR(PositionRCmd->GetNewDoubleValue(newValue));}
+  if (command == RndmCmd){
+    Action->SetRndmFlag(newValue);
+  }
+  if (command == numGammaCmd){
+    Action->SetNumGamma(numGammaCmd->GetNewIntValue(newValue));
+  }
+  if (command == PositionRCmd){
+    Action->SetPositionR(PositionRCmd->GetNewDoubleValue(newValue));
+  }
   for (int i=0; i<4;i++){
-    if( command == energyCmd[i])
-      { Action->SetEnergy(i, energyCmd[i]->GetNewDoubleValue(newValue));}
+    if (command == energyCmd[i]){
+      Action->SetEnergy(i, energyCmd[i]->GetNewDoubleValue(newValue));
+    }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/ZrSaple.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ZrSample.hh"
@@ -35,7 +38,7 @@ ZrSample::ZrSample(G4String giveName)
   name = giveName;
 
   // default parameter values of the sample
-  sample1ThickZ	  = 1.41*mm;
+  sample1ThickZ   = 1.41*mm;
   sample1ThickPhi = 1.44*mm;
   sample1Height   = 10.22*mm;
   sample1OuterPhi = 0.5*31.75*mm;
@@ -101,6 +104,7 @@ void ZrSample::DefineMaterials()
   sample2->AddIsotope(Zr96, abundance=64.18*perCent);
 
   // define chemical molecule
+  // must update volume of density to reflect smaple dim
   density = 7.2832/4.84412*g/cm3;
   sampleMaterial1 = new G4Material("ZrO2_sample1", density, ncomponents=2);
   sampleMaterial1 ->AddElement(sample1, natoms=1);
@@ -115,8 +119,8 @@ void ZrSample::DefineMaterials()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ZrSample::BuildSample(G4LogicalVolume *logWorld,
-					 G4ThreeVector *pos,
-					 G4RotationMatrix *rot){
+                     G4ThreeVector *pos,
+                     G4RotationMatrix *rot){
 
   logicWorld = logWorld;
   SampleRot = rot;
@@ -131,123 +135,127 @@ void ZrSample::BuildSample(G4LogicalVolume *logWorld,
   
   // Sample 1
   sample1 = new G4Tubs("sample1", //name
-  			0,	//inner radius
-			sample1OuterPhi-sample1ThickPhi, 	//outer radius
-			(sample1Height*.5)-sample1ThickZ, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0,  //inner radius
+            sample1OuterPhi-sample1ThickPhi,    //outer radius
+            (sample1Height*.5)-sample1ThickZ, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   
   logSample1 = new G4LogicalVolume(sample1,
-  			sampleMaterial1,	//material
-			"logSample1");
+            sampleMaterial1,    //material
+            "logSample1");
 
-  physSample1 = new G4PVPlacement(rm,	//rotation
-					SamplePos,	//placement
-					logSample1,	//its logical volume
-					"physSample1",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physSample1 = new G4PVPlacement(rm,   //rotation
+                    SamplePos,  //placement
+                    logSample1, //its logical volume
+                    "physSample1",  //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
 
   // Sample 2
   sample2 = new G4Tubs("sample2", //name
-  			sample1OuterPhi+sample2ThickPhi,	//inner radius
-			sample2OuterPhi-sample2ThickPhi, 	//outer radius
-			(sample2Height*.5)-sample2ThickZ, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            sample1OuterPhi+sample2ThickPhi,    //inner radius
+            sample2OuterPhi-sample2ThickPhi,    //outer radius
+            (sample2Height*.5)-sample2ThickZ, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   
   logSample2 = new G4LogicalVolume(sample2,
-  			sampleMaterial2,	//material
-			"logSample2");
+            sampleMaterial2,    //material
+            "logSample2");
 
-  physSample2 = new G4PVPlacement(rm,	//rotation
-					SamplePos,	//placement
-					logSample2,	//its logical volume
-					"physSample2",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physSample2 = new G4PVPlacement(rm,   //rotation
+                    SamplePos,  //placement
+                    logSample2, //its logical volume
+                    "physSample2",  //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
 
   //shell
   G4VSolid *shell1 = new G4Tubs("shell1", //name
-  			0,	//inner radius
-			sample1OuterPhi, 	//outer radius
-			sample1Height*.5, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0,  //inner radius
+            sample1OuterPhi,    //outer radius
+            sample1Height*.5, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   G4VSolid *shell2 = new G4Tubs("shell2", //name
-  			0,	//inner radius
-			sample2OuterPhi, 	//outer radius
-			sample2Height*.5, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
-  G4VSolid *shellSum = new G4UnionSolid("shellSum",			//add the two shells
-  			shell1, shell2,0,G4ThreeVector(0,0,0));
-  G4VSolid *shellSum1 = new G4SubtractionSolid("shellSum1",	//subtract sample1
-  			shellSum, sample1,0,G4ThreeVector(0,0,0));
-  shell = new G4SubtractionSolid("shell",					//subtract sample2
-  			shellSum1, sample2,0,G4ThreeVector(0,0,0));
+            0,  //inner radius
+            sample2OuterPhi,    //outer radius
+            sample2Height*.5, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
+  G4VSolid *shellSum = new G4UnionSolid("shellSum",         //add the two shells
+            shell1, shell2,0,G4ThreeVector(0,0,0));
+  G4VSolid *shellSum1 = new G4SubtractionSolid("shellSum1", //subtract sample1
+            shellSum, sample1,0,G4ThreeVector(0,0,0));
+  shell = new G4SubtractionSolid("shell",                   //subtract sample2
+            shellSum1, sample2,0,G4ThreeVector(0,0,0));
 
   logShell = new G4LogicalVolume(shell,
-  			shellMaterial,	//material
-			"logShell");
+            shellMaterial,  //material
+            "logShell");
 
-  physShell = new G4PVPlacement(rm,	//rotation
-					SamplePos,	//placement
-					logShell,	//its logical volume
-					"physShell",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physShell = new G4PVPlacement(rm, //rotation
+                    SamplePos,  //placement
+                    logShell,   //its logical volume
+                    "physShell",    //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
   
   PrintSampleParameters();     
 
   // Visualization attributes
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.1,0.1,0.1,1));
+
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,1.0,0.0,1));
+ //{G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.0,1.0,1));
   atb->SetForceSolid(true);
-  logSample1->SetVisAttributes(atb);
+  logSample1->SetVisAttributes(atb);}
+
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,1.0,0.0,1));
+  //{G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.5,1.0,1));
+  atb->SetForceSolid(true);
   logSample2->SetVisAttributes(atb);}
   
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,1.0,0.0,0.3));
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,1.0,0.0,0.3));
   //atb->SetForceWireframe(true);
   atb->SetForceSolid(true);
   logShell->SetVisAttributes(atb);}
-  
-
   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ZrSample::PrintSampleParameters(){
-	
+    
   
   G4double Samp1Vol = sample1->GetCubicVolume();
   G4double Samp2Vol = sample2->GetCubicVolume();
 
   G4cout << "\n------------------------------------------------------------"
-		 << "\n---> Shell is " << shellMaterial->GetName() << "\n" 
-		 << "---> Sample 1 \n"
+         << "\n---> Shell is " << shellMaterial->GetName() << "\n" 
+         << "---> Sample 1 \n"
          << sample1ThickZ/mm << "mm Z thickness \n" 
          << sample1ThickPhi/mm << "mm phi thickness \n" 
          << sample1Height/mm << "mm height\n" 
          << sample1OuterPhi/mm << "mm outer radius\n" 
-		 << "---> Sample 1 \n"
+         << "---> Sample 1 \n"
          << sample2ThickZ/mm << "mm Z thickness \n" 
          << sample2ThickPhi/mm << "mm phi thickness \n" 
          << sample2Height/mm << "mm height\n" 
          << sample2OuterPhi/mm << "mm outer radius\n" 
-		 << "--->Calculated quantities \n"
-		 << Samp1Vol/(cm*cm*cm) << " cm^3 sample 1 volume \n"
-		 << Samp2Vol/(cm*cm*cm) << " cm^3 sample 2 volume \n"
+         << "--->Calculated quantities \n"
+         << Samp1Vol/(cm*cm*cm) << " cm^3 sample 1 volume \n"
+         << Samp2Vol/(cm*cm*cm) << " cm^3 sample 2 volume \n"
          << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ZrSample::SetName(G4String giveName){
-	name = giveName;
+  name = giveName;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

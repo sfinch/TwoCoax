@@ -1,4 +1,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// TwoCoax.cc
+// Geant4 montecarlo simulation of the two coaxial HPGe apparatus
+// simulates HPGe, NaI, and sources
+// requires Root and Geant4
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
@@ -27,28 +33,28 @@ int main(int argc,char** argv)
 {
   // Choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+ 
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // Set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  //
+ 
   PhysicsList* physics = new PhysicsList;
   runManager->SetUserInitialization(physics);
-    
+
   // Set user action classes
   PrimaryGeneratorAction* gen_action = 
                           new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
-  //
+ 
   RunAction* run_action = new RunAction;  
   runManager->SetUserAction(run_action);
-  //
+
   EventAction* event_action = new EventAction(run_action);
   runManager->SetUserAction(event_action);
-  //
+
   SteppingAction* stepping_action =
                     new SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);

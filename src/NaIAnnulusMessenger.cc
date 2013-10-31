@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/NaIAnnulusMessenger.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "NaIAnnulusMessenger.hh"
@@ -18,18 +21,21 @@ NaIAnnulusMessenger::NaIAnnulusMessenger(NaIAnnulus* Det)
 
   G4String dir = "/TwoCoax/det/"+Detector->GetName()+"/";
   
+  // directory
   NaIAnnulusDir = new G4UIdirectory(dir);
   G4String guid = Detector->GetName()+" detector commands";
   NaIAnnulusDir->SetGuidance(guid.c_str());
 
   G4String crap;
   //Materials
+  //Crystal material command
   crap = dir+"setCrystalMat";
   CrystalMaterCmd = new G4UIcmdWithAString(crap.c_str(),this);
   CrystalMaterCmd->SetGuidance("Select Material of the Crystal.");
   CrystalMaterCmd->SetParameterName("choice",false);
   CrystalMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  // wall material command
   crap = dir+"setWallMat";
   WallMaterCmd = new G4UIcmdWithAString(crap.c_str(),this);
   WallMaterCmd->SetGuidance("Select Material of the wall.");
@@ -37,6 +43,7 @@ NaIAnnulusMessenger::NaIAnnulusMessenger(NaIAnnulus* Det)
   WallMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //Crystal dimensions 
+  //crystal legth command
   crap = dir+"setCrystalHalfLength";
   CrystalHalfLengthCmd= new G4UIcmdWithADoubleAndUnit(crap.c_str(),this);
   CrystalHalfLengthCmd->SetGuidance("Set the half length of the crystal.");
@@ -45,6 +52,7 @@ NaIAnnulusMessenger::NaIAnnulusMessenger(NaIAnnulus* Det)
   CrystalHalfLengthCmd->SetUnitCategory("Length");    
   CrystalHalfLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  //crystal inner radius command
   crap = dir+"setCrystalInRad";
   CrystalInRadCmd= new G4UIcmdWithADoubleAndUnit(crap.c_str(),this);
   CrystalInRadCmd->SetGuidance("Set the inner radius of the crystal.");
@@ -53,6 +61,7 @@ NaIAnnulusMessenger::NaIAnnulusMessenger(NaIAnnulus* Det)
   CrystalInRadCmd->SetUnitCategory("Length");    
   CrystalInRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  //crystal outer radius command
   crap = dir+"setCrystalOutRad";
   CrystalOutRadCmd= new G4UIcmdWithADoubleAndUnit(crap.c_str(),this);
   CrystalOutRadCmd->SetGuidance("Set the outer radius of the crystal.");
@@ -62,6 +71,7 @@ NaIAnnulusMessenger::NaIAnnulusMessenger(NaIAnnulus* Det)
   CrystalOutRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //Wall dimensions
+  //wall outer thickness command
   crap = dir+"setWallInThick";
   WallInThickCmd = new G4UIcmdWithADoubleAndUnit(crap.c_str(),this);
   WallInThickCmd->SetGuidance("Set thickness of the inner side wall");
@@ -70,6 +80,7 @@ NaIAnnulusMessenger::NaIAnnulusMessenger(NaIAnnulus* Det)
   WallInThickCmd->SetUnitCategory("Length");  
   WallInThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  //wall outer thickness command
   crap = dir+"setWallOutThick";
   WallOutThickCmd = new G4UIcmdWithADoubleAndUnit(crap.c_str(),this);
   WallOutThickCmd->SetGuidance("Set thickness of the outer side wall");
@@ -96,28 +107,31 @@ NaIAnnulusMessenger::~NaIAnnulusMessenger()
 void NaIAnnulusMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   //materials
-  if( command == CrystalMaterCmd )
-   { Detector->SetCrystalMaterial(newValue);}
-   
-  if( command == WallMaterCmd )
-   { Detector->SetWallMaterial(newValue);}
+  if (command == CrystalMaterCmd){
+    Detector->SetCrystalMaterial(newValue);
+  }
+  if (command == WallMaterCmd){
+    Detector->SetWallMaterial(newValue);
+  }
   
   //Crystal dimensions
-  if( command == CrystalHalfLengthCmd )
-   { Detector->SetCrystalHalfLength(CrystalHalfLengthCmd->GetNewDoubleValue(newValue));}
+  if (command == CrystalHalfLengthCmd){
+    Detector->SetCrystalHalfLength(CrystalHalfLengthCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == CrystalInRadCmd){
+    Detector->SetCrystalInRad(CrystalInRadCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == CrystalOutRadCmd){
+    Detector->SetCrystalOutRad(CrystalOutRadCmd->GetNewDoubleValue(newValue));
+  }
    
-  if( command == CrystalInRadCmd )
-   { Detector->SetCrystalInRad(CrystalInRadCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == CrystalOutRadCmd )
-   { Detector->SetCrystalOutRad(CrystalOutRadCmd->GetNewDoubleValue(newValue));}
-   
-   //Shell Dimensions
-  if( command == WallInThickCmd )
-   { Detector->SetWallInThickness(WallInThickCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WallOutThickCmd )
-   { Detector->SetWallOutThickness(WallOutThickCmd->GetNewDoubleValue(newValue));}
+  //Shell Dimensions
+  if (command == WallInThickCmd){
+    Detector->SetWallInThickness(WallInThickCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == WallOutThickCmd){
+    Detector->SetWallOutThickness(WallOutThickCmd->GetNewDoubleValue(newValue));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

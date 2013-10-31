@@ -1,4 +1,7 @@
 # Macro File
+# Loops over postion in r, from 0 to 55 mm in 5 mm steps
+# Written for two HPGes, coincidence eff
+# requires runPos.mac
 
 #turn off visulizer
 /vis/disable

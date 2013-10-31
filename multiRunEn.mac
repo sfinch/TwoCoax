@@ -1,4 +1,7 @@
 # Macro File
+# Loops over energy from 300-1500 keV in 100 keV steps
+# Designed for a single HPGe
+# Requires runEn.mac
 
 #turn off visulizer
 /vis/disable
@@ -6,7 +9,7 @@
 /TwoCoax/event/printModulo 10000
 #set detector distance
 /TwoCoax/det/setDetectorDistance 24.9 cm
-#set detector distance
+#set gun to GPS (general particle source)
 /TwoCoax/gun/rndm on
 #update
 /TwoCoax/det/update

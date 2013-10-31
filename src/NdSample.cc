@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/NdSample.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "NdSample.hh"
@@ -103,8 +106,8 @@ void NdSample::DefineMaterials()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void NdSample::BuildSample(G4LogicalVolume *logWorld,
-					 G4ThreeVector *pos,
-					 G4RotationMatrix *rot){
+                     G4ThreeVector *pos,
+                     G4RotationMatrix *rot){
 
   logicWorld = logWorld;
   SampleRot = rot;
@@ -119,54 +122,54 @@ void NdSample::BuildSample(G4LogicalVolume *logWorld,
   
   // Sample 
   sample = new G4Tubs("sample", //name
-  			0,	//inner radius
-			samplePhi, 	//outer radius
-			sampleHeight*.5, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0,  //inner radius
+            samplePhi,  //outer radius
+            sampleHeight*.5, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   
   logSample = new G4LogicalVolume(sample,
-  			sampleMaterial,	//material
-			"logSample");
+            sampleMaterial, //material
+            "logSample");
 
-  physSample = new G4PVPlacement(rm,	//rotation
-					SamplePos,	//placement
-					logSample,	//its logical volume
-					"physSample",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physSample = new G4PVPlacement(rm,    //rotation
+                    SamplePos,  //placement
+                    logSample,  //its logical volume
+                    "physSample",   //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
 
   //shell
   G4VSolid *shell1 = new G4Tubs("shell1", //name
-  			0,	//inner radius
-			containerOuterPhi, 	//outer radius
-			containerWallThick+(sampleHeight*.5), //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
-  shell = new G4SubtractionSolid("shell",					//subtract sample2
-  			shell1, sample,0,G4ThreeVector(0,0,0));
+            0,  //inner radius
+            containerOuterPhi,  //outer radius
+            containerWallThick+(sampleHeight*.5), //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
+  shell = new G4SubtractionSolid("shell",                   //subtract sample2
+            shell1, sample,0,G4ThreeVector(0,0,0));
 
   logShell = new G4LogicalVolume(shell,
-  			shellMaterial,	//material
-			"logShell");
+            shellMaterial,  //material
+            "logShell");
 
-  physShell = new G4PVPlacement(rm,	//rotation
-					SamplePos,	//placement
-					logShell,	//its logical volume
-					"physShell",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physShell = new G4PVPlacement(rm, //rotation
+                    SamplePos,  //placement
+                    logShell,   //its logical volume
+                    "physShell",    //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
   
   PrintSampleParameters();     
 
   // Visualization attributes
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.1,0.1,0.1,1));
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.1,0.1,0.1,1));
   atb->SetForceSolid(true);
   logSample->SetVisAttributes(atb);}
   
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,1.0,0.0,0.3));
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,1.0,0.0,0.3));
   atb->SetForceSolid(true);
   logShell->SetVisAttributes(atb);}
   
@@ -175,28 +178,27 @@ void NdSample::BuildSample(G4LogicalVolume *logWorld,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void NdSample::PrintSampleParameters(){
-	
   
   G4double SampVol = sample->GetCubicVolume();
 
   G4cout << "\n------------------------------------------------------------"
-		 << "\n---> Shell is " << shellMaterial->GetName() << "\n" 
-		 << "---> Sample \n"
+         << "\n---> Shell is " << shellMaterial->GetName() << "\n" 
+         << "---> Sample \n"
          << sampleHeight/mm << "mm height\n" 
          << samplePhi/mm << "mm phi \n" 
          << containerWallThick/mm << "mm container wall thickness \n" 
          << containerOuterPhi/mm << "mm container outer radius\n" 
-		 << "---> Bag \n"
+         << "---> Bag \n"
          << bagThick/mm << "mm Z thickness \n" 
-		 << "--->Calculated quantities \n"
-		 << SampVol/(cm*cm*cm) << " cm^3 sample volume \n"
+         << "--->Calculated quantities \n"
+         << SampVol/(cm*cm*cm) << " cm^3 sample volume \n"
          << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void NdSample::SetName(G4String giveName){
-	name = giveName;
+    name = giveName;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

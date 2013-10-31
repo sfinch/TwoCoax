@@ -1,4 +1,8 @@
 # Macro File
+# Multiple runs, looping over dead later thickness
+# Designed for a single HPGe
+# Requires runDead.mac
+# File #1, loops 700-1300 um in 100 um steps
 
 #turn off visulizer
 /vis/disable
@@ -8,11 +12,11 @@
 /gps/energy 661.657 keV
 #set detector distance
 /TwoCoax/det/setDetectorDistance 24.9 cm
-#set detector distance
+#set gun to GPS (general particle source)
 /TwoCoax/gun/rndm on
-#update
+#update geometry
 /TwoCoax/det/update
 
-#loop over energy values
+#loop over deal layer thickness (in um)
 /control/loop runDead.mac dl 700 1300 100 
 

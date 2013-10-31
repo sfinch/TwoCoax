@@ -22,7 +22,7 @@ include(${Geant4_USE_FILE})
 # Locate sources and headers for this project
 include_directories(${PROJECT_SOURCE_DIR}/include 
                     ${Geant4_INCLUDE_DIR}/include
-					${ROOT_INCLUDE_DIR})
+                    ${ROOT_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -35,15 +35,16 @@ target_link_libraries(TwoCoax ${ROOT_LIBRARIES} )
 # Copy all scripts to the build directory
 # This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
-file(GLOB TwoCoax_SCRIPTS RELATIVE "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/*.mac"
-														   "${PROJECT_SOURCE_DIR}/*.C")
+file(GLOB TwoCoax_SCRIPTS RELATIVE "${PROJECT_SOURCE_DIR}" 
+                                   "${PROJECT_SOURCE_DIR}/*.mac"
+                                   "${PROJECT_SOURCE_DIR}/*.C")
 
 foreach(_script ${TwoCoax_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
     COPYONLY
-    )
+  )
 endforeach()
 
 # Add program to the project targets

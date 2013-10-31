@@ -1,4 +1,5 @@
 # Macro File
+# Runs 1 million events with curent settings
 
 #turn off visulizer
 /vis/disable

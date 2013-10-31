@@ -1,4 +1,5 @@
 # Macro File
+# Intended to be used with multiRunPos.mac
 
 #set position 
 /TwoCoax/gun/positionR {pos} mm 

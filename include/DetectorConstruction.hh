@@ -1,4 +1,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/DetectorConstruction.hh
+// Makes the detector, inluding HPGes, sources, and the NaI veto
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorConstruction_h
@@ -32,56 +36,60 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+    ~DetectorConstruction();
 
   public:
      
-     void SetDetectorDistance (G4double);     
-
-     G4VPhysicalVolume* Construct();
-
-     void UpdateGeometry();
+    G4VPhysicalVolume* Construct();
+    void UpdateGeometry();
      
   public:
   
-     void PrintTwoCoaxParameters(); 
-                    
-     G4double GetWorldSizeX()           {return WorldSizeX;}; 
-     G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
-     
-     G4double GetDetectorDistance()     {return detectorDistance;};
-     HPGe* GetHPGe(G4int det);
-     NaIAnnulus* GetNaIAnnulus()        {return NaIDet;};
-     ZrSample* GetZrSample()            {return ZrSamp;};
-     MoSample* GetMoSample()            {return MoSamp;};
-     NdSample* GetNdSample()            {return NdSamp;};
+    void PrintTwoCoaxParameters(); 
 
-     const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
-                 
+    // Setters
+    void SetDetectorDistance (G4double);     
+
+    // Getters
+    G4double GetWorldSizeX()           {return WorldSizeX;}; 
+    G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
+    G4double GetDetectorDistance()     {return detectorDistance;};
+
+    HPGe* GetHPGe(G4int det);
+    NaIAnnulus* GetNaIAnnulus()        {return NaIDet;};
+    ZrSample* GetZrSample()            {return ZrSamp;};
+    MoSample* GetMoSample()            {return MoSamp;};
+    NdSample* GetNdSample()            {return NdSamp;};
+
+    const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
+
   private:
      
-     G4double           detectorDistance;
-     HPGe*              HPGeDet[2];
-     NaIAnnulus*        NaIDet;
-     ZrSample*          ZrSamp;
-     MoSample*          MoSamp;
-     NdSample*          NdSamp;
+    // Objects places in the detector
+    G4double           detectorDistance;
+    HPGe*              HPGeDet[2];
+    NaIAnnulus*        NaIDet;
+    ZrSample*          ZrSamp;
+    MoSample*          MoSamp;
+    NdSample*          NdSamp;
 
-     G4Material*        defaultMaterial;
-     G4double           WorldSizeYZ;
-     G4double           WorldSizeX;
+    // World properties
+    G4Material*        defaultMaterial;
+    G4double           WorldSizeYZ;
+    G4double           WorldSizeX;
             
-     G4Box*             solidWorld;    //pointer to the solid World 
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
+    G4Box*             solidWorld;    //pointer to the solid World 
+    G4LogicalVolume*   logicWorld;    //pointer to the logical World
+    G4VPhysicalVolume* physiWorld;    //pointer to the physical World
 
-     DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+    // Messenger
+    DetectorMessenger* detectorMessenger;  //pointer to the Messenger
       
   private:
     
-     void DefineMaterials();
-     void ComputeTwoCoaxParameters();
-     G4VPhysicalVolume* ConstructTwoCoax();     
+    void DefineMaterials();
+    void ComputeTwoCoaxParameters();
+    G4VPhysicalVolume* ConstructTwoCoax();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

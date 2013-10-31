@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/PrimaryGeneratorAction.hh
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction_h
@@ -20,33 +23,35 @@ class PrimaryGeneratorMessenger;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  PrimaryGeneratorAction(DetectorConstruction*);    
-  virtual ~PrimaryGeneratorAction();
+  public:
+    PrimaryGeneratorAction(DetectorConstruction*);    
+    virtual ~PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
-  void SetRndmFlag(G4String val)   { rndmFlag = val;}
-  void SetNumGamma(int num);
-  void SetPositionR(G4double R)    { positionR = R;}
-  void SetEnergy(int num, G4double En);
-  G4ThreeVector randP();
-  G4ThreeVector randE2(G4ThreeVector);
+    void GeneratePrimaries(G4Event*);
 
-private:
-  G4ParticleGun*           particleGun;	 //pointer a to G4  class
-  DetectorConstruction*    Detector;     //pointer to the geometry
+    //setters
+    void SetRndmFlag(G4String val)   { rndmFlag = val;}
+    void SetNumGamma(int num);
+    void SetPositionR(G4double R)    { positionR = R;}
+    void SetEnergy(int num, G4double En);
+
+  private:
+    G4ParticleGun*           particleGun;  //pointer a to G4  class
+    DetectorConstruction*    Detector;     //pointer to the geometry
+    G4GeneralParticleSource* particleSource;
     
-  PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
-  G4String                   rndmFlag;	     //flag for a rndm impact point
+    PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
+    G4String                   rndmFlag;       //flag for a rndm impact point
 
-  G4int          numGamma;
-  G4double       positionR;
-  G4double       energy[4];
+    G4int          numGamma;    //number of gammas emmited (max 4)
+    G4double       positionR;   //position in r
+    G4double       energy[4];   //energy of emmited gammas
 
-  TF1 *fPDF020;
-  TF1 *fPDF420;
-
-  G4GeneralParticleSource* particleSource;
+    // angular distriutions
+    TF1 *fPDF020;
+    TF1 *fPDF420;
+    G4ThreeVector randP();
+    G4ThreeVector randE2(G4ThreeVector);
 
 };
 
@@ -64,7 +69,7 @@ inline void PrimaryGeneratorAction::SetEnergy(int num, G4double En)
 inline void PrimaryGeneratorAction::SetNumGamma(int num)
 {
   if (num<1)
-  	num=1;
+    num=1;
   else if (num>4)
     num = 4;
   

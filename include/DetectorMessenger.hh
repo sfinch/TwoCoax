@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/DetectorMessenger.hh
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorMessenger_h
@@ -20,18 +23,19 @@ class DetectorMessenger: public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+    ~DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
     DetectorConstruction* Detector;
     
+    //Directories
     G4UIdirectory*             TwoCoaxDir;
     G4UIdirectory*             detDir;
-	//materials
+    //Set separation distance between detectors
     G4UIcmdWithADoubleAndUnit* DetectorDistanceCmd;
-	//update
+    //update
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
 

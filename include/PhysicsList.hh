@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/PhysicsList.hh
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsList_h
@@ -11,21 +14,21 @@
 
 class PhysicsList: public G4VUserPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
+  public:
+    PhysicsList();
+    virtual ~PhysicsList();
 
-  // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
  
-  void SetCuts();
+    void SetCuts();
    
-private:
+  private:
 
-  // these methods Construct physics processes and register them
-  void ConstructDecay();
-  void ConstructEM();
+    // these methods Construct physics processes and register them
+    void ConstructDecay();
+    void ConstructEM();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

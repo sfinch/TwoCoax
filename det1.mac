@@ -1,18 +1,19 @@
 # Macro File
 
 #set deadlayer 
+/TwoCoax/det/HPGe2/setDeadLayer 2.260 mm
 
+#set crystal dim to ortec values
 /TwoCoax/det/HPGe2/setCrystalHalfLength 24.6 mm
 /TwoCoax/det/HPGe2/setCrystalRad  43.75 mm
 /TwoCoax/det/HPGe2/setCrystalEndRad 8 mm
 /TwoCoax/det/HPGe2/setHoleRad 4.5 mm
-/TwoCoax/det/HPGe2/setHoleDepth 35.5 mm
 
-/TwoCoax/det/HPGe2/setDeadLayer 2.260 mm
-
+#set shell dim to ortec values
 /TwoCoax/det/HPGe2/setShellHalfLength 52.5 mm
 /TwoCoax/det/HPGe2/setEndGap 3.5 mm
 /TwoCoax/det/HPGe2/setWindowThick 2.54 mm
 /TwoCoax/det/HPGe2/setWallThick 1.5 mm
 
+#always update the det
 /TwoCoax/det/update

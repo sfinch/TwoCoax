@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/MoSample.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "MoSample.hh"
@@ -35,7 +38,7 @@ MoSample::MoSample(G4String giveName)
   name = giveName;
 
   // default parameter values of the sample
-  sampleThick 	 = 1.*cm;
+  sampleThick    = 1.*cm;
   sampleRad      = (10./2.)*cm;
 
   ComputeMoSampleParameters();
@@ -62,8 +65,8 @@ void MoSample::DefineMaterials()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MoSample::BuildSample(G4LogicalVolume *logWorld,
-					 G4ThreeVector *pos,
-					 G4RotationMatrix *rot){
+                     G4ThreeVector *pos,
+                     G4RotationMatrix *rot){
 
   logicWorld = logWorld;
   SampleRot = rot;
@@ -78,23 +81,23 @@ void MoSample::BuildSample(G4LogicalVolume *logWorld,
   
   // Sample 
   sample = new G4Tubs("sample", //name
-  			0,	//inner radius
-			sampleRad, 	//outer radius
-			sampleThick/2., //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0,  //inner radius
+            sampleRad,  //outer radius
+            sampleThick/2., //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   
   logSample = new G4LogicalVolume(sample,
-  			sampleMaterial,	//material
-			"logSample");
+            sampleMaterial, //material
+            "logSample");
 
-  physSample = new G4PVPlacement(rm,	//rotation
-					SamplePos,	//placement
-					logSample,	//its logical volume
-					"physSample",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physSample = new G4PVPlacement(rm,    //rotation
+                    SamplePos,  //placement
+                    logSample,  //its logical volume
+                    "physSample",   //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
 
   PrintSampleParameters();     
 
@@ -108,24 +111,23 @@ void MoSample::BuildSample(G4LogicalVolume *logWorld,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MoSample::PrintSampleParameters(){
-	
   
   G4double SampVol = sample->GetCubicVolume();
 
   G4cout << "\n------------------------------------------------------------"
-		 << "\n---> Sample is " << sampleMaterial->GetName() << "\n" 
-		 << "---> Sample 1 \n"
+         << "\n---> Sample is " << sampleMaterial->GetName() << "\n" 
+         << "---> Sample 1 \n"
          << sampleThick/mm << "mm Z thickness \n" 
          << sampleRad/mm << "mm height\n" 
-		 << "--->Calculated quantities \n"
-		 << SampVol/(cm*cm*cm) << " cm^3 sample 1 volume \n"
+         << "--->Calculated quantities \n"
+         << SampVol/(cm*cm*cm) << " cm^3 sample 1 volume \n"
          << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void MoSample::SetName(G4String giveName){
-	name = giveName;
+    name = giveName;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

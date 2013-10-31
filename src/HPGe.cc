@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/HPGe.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HPGe.hh"
@@ -59,10 +62,10 @@ HPGe::HPGe(G4String giveName)
   
   //HPGe #2
   else{
-  	// default parameter values of the crystal 
-  	crystalHalfLength = (49.9/2)*mm;
-  	crystalRad = (87.8/2)*mm;
-  	crystalEndRad = (8)*mm;
+    // default parameter values of the crystal 
+    crystalHalfLength = (49.9/2)*mm;
+    crystalRad = (87.8/2)*mm;
+    crystalEndRad = (8)*mm;
     holeRad = (8.6/2)*mm;
     holeDepth = (35.7)*mm;
 
@@ -91,42 +94,44 @@ HPGe::HPGe(G4String giveName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HPGe::~HPGe(){ 
-	delete hpgeMessenger;
+    delete hpgeMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::BuildHPGe(G4LogicalVolume *logWorld,
-					 G4ThreeVector *pos,
-					 G4RotationMatrix *rot){
+                     G4ThreeVector *pos,
+                     G4RotationMatrix *rot){
 
    logicWorld = logWorld;
    DetPos = pos;
    DetRot = rot;
+
+   // Find the placement of each HPGe
    int multx = 1;
    int multy = 1;
    int multz = 1;
 
    if (DetPos->x()<0){
-   	 multx = -1*multx;
-   	 DetPos->setX(-1*pos->x());
+     multx = -1*multx;
+     DetPos->setX(-1*pos->x());
    }
    if (DetPos->y()<0){
-   	 multy = -1*multy;
-   	 DetPos->setY(-1*pos->y());
+     multy = -1*multy;
+     DetPos->setY(-1*pos->y());
    }
    if (DetPos->x()<0){
-   	 multz = -1*multz;
-   	 DetPos->setZ(-1*pos->z());
+     multz = -1*multz;
+     DetPos->setZ(-1*pos->z());
    }
 
    G4RotationMatrix *rm = new G4RotationMatrix();
    rm->rotateY(90.*deg);
    rm->transform(*DetRot);
    G4ThreeVector CryPlacement = G4ThreeVector(multx*(crystalHalfLength+windowThickness+endGap+DetPos->x()),
-   								multy*DetPos->y(),multz*DetPos->z());
+                                multy*DetPos->y(),multz*DetPos->z());
    G4ThreeVector deadPlacement = G4ThreeVector(multx*(crystalHalfLength+windowThickness+endGap+DetPos->x()),
-   								multy*DetPos->y(),multz*DetPos->z());
+                                multy*DetPos->y(),multz*DetPos->z());
 
    G4RotationMatrix *norot = new G4RotationMatrix();
    norot->rotateY(90.*deg);
@@ -139,137 +144,137 @@ void HPGe::BuildHPGe(G4LogicalVolume *logWorld,
 
   //Making the exterior crystal shape
   G4VSolid *cyl1 = new G4Tubs("cyl1", //name
-  			0.*cm, 			//inner radius
-			crystalRad-crystalEndRad, 	//outer radius
-			crystalHalfLength, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0.*cm,          //inner radius
+            crystalRad-crystalEndRad,   //outer radius
+            crystalHalfLength, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   G4VSolid *cyl2 = new G4Tubs("cyl2", //name
-  			0.*cm, 			//innter radius
-			crystalRad, 	//outer radius
-			crystalHalfLength-.5*crystalEndRad, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
-  G4VSolid *tor = new G4Torus("tor",	//name
-  			0.*cm, 			//inner r
-			crystalEndRad,	//outer r
- 			crystalRad-crystalEndRad,//torus rad
-			0.*deg, 		//start phi
-			360.*deg);		//end phi
+            0.*cm,          //innter radius
+            crystalRad,     //outer radius
+            crystalHalfLength-.5*crystalEndRad, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
+  G4VSolid *tor = new G4Torus("tor",    //name
+            0.*cm,          //inner r
+            crystalEndRad,  //outer r
+            crystalRad-crystalEndRad,//torus rad
+            0.*deg,         //start phi
+            360.*deg);      //end phi
   G4VSolid *crystal1 = new G4UnionSolid("crystal1", //name
-  			cyl1,cyl2,0,G4ThreeVector(0.,0.,-.5*crystalEndRad));
+            cyl1,cyl2,0,G4ThreeVector(0.,0.,-.5*crystalEndRad));
   G4VSolid *crystal2 = new G4UnionSolid("crystal2", //name
-  			crystal1, tor,0,G4ThreeVector(0.,0.,crystalHalfLength-crystalEndRad));
+            crystal1, tor,0,G4ThreeVector(0.,0.,crystalHalfLength-crystalEndRad));
   
   // making the active part of the crystal
   G4VSolid *activeCyl1 = new G4Tubs("activeCyl1", //name
-  			0.*cm, 			//inner radius
-			crystalRad-crystalEndRad, 	//outer radius
-			crystalHalfLength-.5*deadLayerThick, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0.*cm,          //inner radius
+            crystalRad-crystalEndRad,   //outer radius
+            crystalHalfLength-.5*deadLayerThick, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   G4VSolid *activeCyl2 = new G4Tubs("activeCyl2", //name
-  			0.*cm, 			//innter radius
-			crystalRad-deadLayerThick, 	//outer radius
-			crystalHalfLength-.5*crystalEndRad, //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
-  G4VSolid *activeTor = new G4Torus("activeTor",	//name
-  			0.*cm, 			//inner r
-			crystalEndRad-deadLayerThick,	//outer r
- 			crystalRad-crystalEndRad,//torus rad
-			0.*deg, 		//start phi
-			360.*deg);		//end phi
+            0.*cm,          //innter radius
+            crystalRad-deadLayerThick,  //outer radius
+            crystalHalfLength-.5*crystalEndRad, //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
+  G4VSolid *activeTor = new G4Torus("activeTor",    //name
+            0.*cm,          //inner r
+            crystalEndRad-deadLayerThick,   //outer r
+            crystalRad-crystalEndRad,//torus rad
+            0.*deg,         //start phi
+            360.*deg);      //end phi
   G4VSolid *activeCrystal1 = new G4UnionSolid("activeCrystal1", //name
-  			activeCyl1,activeCyl2,0,G4ThreeVector(0.,0.,0.5*deadLayerThick-.5*crystalEndRad));
+            activeCyl1,activeCyl2,0,G4ThreeVector(0.,0.,0.5*deadLayerThick-.5*crystalEndRad));
   G4VSolid *activeCrystal2 = new G4UnionSolid("activeCrystal2", //name
-  			activeCrystal1, activeTor,0,G4ThreeVector(0.,0.,crystalHalfLength-crystalEndRad+.5*deadLayerThick));
+            activeCrystal1, activeTor,0,G4ThreeVector(0.,0.,crystalHalfLength-crystalEndRad+.5*deadLayerThick));
   
   //making the hole
   G4VSolid *inCyl = new G4Tubs("inCyl", //name
-			0.*cm, 			//inner radius
-			holeRad, 	//outer radius
-			0.5*(holeDepth-holeRad), //z half length
-			0.*deg,			//starting phi
-			360.*deg);		//ending phi
+            0.*cm,          //inner radius
+            holeRad,    //outer radius
+            0.5*(holeDepth-holeRad), //z half length
+            0.*deg,         //starting phi
+            360.*deg);      //ending phi
   G4VSolid *inSph = new G4Orb("inSph",holeRad);
   hole = new G4UnionSolid("hole",
-  			inCyl,inSph,0,G4ThreeVector(0.,0.,.5*(holeDepth-holeRad)));
+            inCyl,inSph,0,G4ThreeVector(0.,0.,.5*(holeDepth-holeRad)));
   
   //final detector shape
   activeCrystal = new G4SubtractionSolid("solidCrystal",
-  			activeCrystal2,hole,0,G4ThreeVector(0.,0.,-crystalHalfLength+0.5*holeDepth-0.5*holeRad+.5*deadLayerThick));
+            activeCrystal2,hole,0,G4ThreeVector(0.,0.,-crystalHalfLength+0.5*holeDepth-0.5*holeRad+.5*deadLayerThick));
   deadLayer = new G4SubtractionSolid("deadLayer",
-  			crystal2,activeCrystal2,0,G4ThreeVector(0.,0.,-deadLayerThick));
+            crystal2,activeCrystal2,0,G4ThreeVector(0.,0.,-deadLayerThick));
 
   logCrystal = new G4LogicalVolume(activeCrystal,
-  			crystalMaterial,	//material
-			"logCrystal");
+            crystalMaterial,    //material
+            "logCrystal");
   logDeadLayer = new G4LogicalVolume(deadLayer,
-  			crystalMaterial,	//material
-			"logDeadLayer");
+            crystalMaterial,    //material
+            "logDeadLayer");
 
-  physiCrystal = new G4PVPlacement(rm,	//rotation
-					//G4ThreeVector(crystalHalfLength+windowThickness+endGap+.5*deadLayerThick,0.,0.),//placement
-					CryPlacement,
-					logCrystal,	//its logical volume
-					"physiCrystal",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
-  physiDeadLayer = new G4PVPlacement(rm,	//rotation
-					//G4ThreeVector(crystalHalfLength+windowThickness+endGap,0.,0.),	//placement
-					deadPlacement,
-					logDeadLayer,	//its logical volume
-					"physiDeadLayer",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+  physiCrystal = new G4PVPlacement(rm,  //rotation
+                    //G4ThreeVector(crystalHalfLength+windowThickness+endGap+.5*deadLayerThick,0.,0.),//placement
+                    CryPlacement,
+                    logCrystal, //its logical volume
+                    "physiCrystal", //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
+  physiDeadLayer = new G4PVPlacement(rm,    //rotation
+                    //G4ThreeVector(crystalHalfLength+windowThickness+endGap,0.,0.),    //placement
+                    deadPlacement,
+                    logDeadLayer,   //its logical volume
+                    "physiDeadLayer",   //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
  
   //Make the outer shell
-  G4VSolid *outerShell = new G4Tubs("outerShell",	//name
-  			crystalRad+endGap,	//inner rad
-  			crystalRad+endGap+wallThickness,	//outer rad
-  			shellHalfLength,	//half length
-			0.*deg,		//starting phi
-			360.*deg);	//ending phi
+  G4VSolid *outerShell = new G4Tubs("outerShell",   //name
+            crystalRad+endGap,  //inner rad
+            crystalRad+endGap+wallThickness,    //outer rad
+            shellHalfLength,    //half length
+            0.*deg,     //starting phi
+            360.*deg);  //ending phi
   logShell = new G4LogicalVolume(outerShell,
-  			wallMaterial,	//material
-			"logShell");
-  physiShell = new G4PVPlacement(rm,	//rotation
-					G4ThreeVector(multx*(shellHalfLength+DetPos->x()),multy*DetPos->y(),multz*DetPos->z()),	//placement
-					logShell,	//its logical volume
-					"physiShell",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+            wallMaterial,   //material
+            "logShell");
+  physiShell = new G4PVPlacement(rm,    //rotation
+                    G4ThreeVector(multx*(shellHalfLength+DetPos->x()),multy*DetPos->y(),multz*DetPos->z()), //placement
+                    logShell,   //its logical volume
+                    "physiShell",   //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
 
 
   //Make the window
-  G4VSolid *window = new G4Tubs("window",	//name
-  			0,	//inner rad
-  			crystalRad+endGap,	//outer rad
-  			0.5*windowThickness,	//outer rad
-			0.*deg,		//starting phi
-			360.*deg);	//ending phi
+  G4VSolid *window = new G4Tubs("window",   //name
+            0,  //inner rad
+            crystalRad+endGap,  //outer rad
+            0.5*windowThickness,    //outer rad
+            0.*deg,     //starting phi
+            360.*deg);  //ending phi
   logWindow = new G4LogicalVolume(window,
-  			windowMaterial,	//material
-			"logWindow");
-  physiWindow = new G4PVPlacement(rm,	//rotation
-					G4ThreeVector(multx*(.5*windowThickness+DetPos->x()),multy*DetPos->y(),multz*DetPos->z()),	//placement
-					logWindow,	//its logical volume
-					"physiWindow",	//its name
-					logicWorld,	//its mother  volume
-					false,		//no boolean operation
-					0);		//copy number
+            windowMaterial, //material
+            "logWindow");
+  physiWindow = new G4PVPlacement(rm,   //rotation
+                    G4ThreeVector(multx*(.5*windowThickness+DetPos->x()),multy*DetPos->y(),multz*DetPos->z()),  //placement
+                    logWindow,  //its logical volume
+                    "physiWindow",  //its name
+                    logicWorld, //its mother  volume
+                    false,      //no boolean operation
+                    0);     //copy number
 
 
   // Set solid angle
   G4double detectorDistance = sqrt(DetPos->x()*DetPos->x() + DetPos->y()*DetPos->y() 
       + DetPos->z()*DetPos->z());
-  G4double shellWidth = crystalRad+endGap+wallThickness;
+  G4double shellWidth = crystalRad + endGap + wallThickness;
   theta = pi - acos(detectorDistance*1./
-  		sqrt(shellWidth*shellWidth + detectorDistance*detectorDistance));
+        sqrt(shellWidth*shellWidth + detectorDistance*detectorDistance));
   
   G4UImanager* UI = G4UImanager::GetUIpointer();
   std::stringstream strbld;
@@ -282,27 +287,27 @@ void HPGe::BuildHPGe(G4LogicalVolume *logWorld,
   strbld << "/gps/ang/rot1 0 0 -1";
   UI->ApplyCommand(strbld.str());
 
-		
+        
   PrintHPGeParameters();     
   
- // Visualization attributes
- // crysal
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,1.0,0.0,0.7));
+  // Visualization attributes
+  // crysal
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,1.0,0.0,0.7));
   atb->SetForceSolid(true);
   logCrystal->SetVisAttributes(atb);}
   
- // dead layer
- //{G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,0.0,0.0,0.2));
- // atb->SetForceSolid(true);
- // logDeadLayer->SetVisAttributes(atb);}
+  // dead layer
+  //{G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,0.0,0.0,0.2));
+  //atb->SetForceSolid(true);
+  //logDeadLayer->SetVisAttributes(atb);}
   
- // window
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,0.0,0.0,0.5));
+  // window
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(1.0,0.0,0.0,0.5));
   atb->SetForceSolid(true);
   logWindow->SetVisAttributes(atb);}
 
- // shell
- {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.0,1.0,0.1));
+  // shell
+  {G4VisAttributes* atb= new G4VisAttributes(G4Colour(0.0,0.0,1.0,0.1));
   atb->SetForceSolid(true);
   logShell->SetVisAttributes(atb);}
 
@@ -311,7 +316,7 @@ void HPGe::BuildHPGe(G4LogicalVolume *logWorld,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::PrintHPGeParameters(){
-	
+    
   G4double activeVol = activeCrystal->GetCubicVolume();
   G4double activeSA = activeCrystal->GetSurfaceArea();
   G4double deadVol = deadLayer->GetCubicVolume();
@@ -329,51 +334,51 @@ void HPGe::PrintHPGeParameters(){
          << holeRad/mm << "mm hole radius \n" 
          << holeDepth/mm << "mm hole depth \n" 
          << deadLayerThick/mm << "mm dead layer \n" 
-		 << "---> Shielding properties \n"
+         << "---> Shielding properties \n"
          << 2.*shellHalfLength/mm << "mm shell length \n" 
          << wallThickness/mm << "mm wall of " << wallMaterial->GetName() << "\n" 
          << endGap/mm << "mm end gap \n" 
          << windowThickness/mm << "mm window of " << windowMaterial->GetName() << "\n"
-		 << "--->Calculated quantities \n"
-		 << holeVol/(cm*cm*cm) << " cm^3 hole volume \n"
-		 << holeSA/(cm*cm) << " cm^2 hole surface area \n"
-		 << activeVol/(cm*cm*cm) << " cm^3 Active volume \n"
-		 << activeSA/(cm*cm) << " cm^2 Active surface area \n"
-		 << deadVol/(cm*cm*cm) << " cm^3 Dead layer volume \n"
-		 << deadSA/(cm*cm) << " cm^2  Dead layer surface area \n"
-		 << theta << " theta \n"
-		 << solidangle << " /4*pi solid angle\n"
+         << "--->Calculated quantities \n"
+         << holeVol/(cm*cm*cm) << " cm^3 hole volume \n"
+         << holeSA/(cm*cm) << " cm^2 hole surface area \n"
+         << activeVol/(cm*cm*cm) << " cm^3 Active volume \n"
+         << activeSA/(cm*cm) << " cm^2 Active surface area \n"
+         << deadVol/(cm*cm*cm) << " cm^3 Dead layer volume \n"
+         << deadSA/(cm*cm) << " cm^2  Dead layer surface area \n"
+         << theta << " theta \n"
+         << solidangle << " /4*pi solid angle\n"
          << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetName(G4String giveName){
-	name = giveName;
+  name = giveName;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetCrystalMaterial(G4String materialChoice){
   // search the material by its name   
-	G4NistManager* manager = G4NistManager::Instance();
-	crystalMaterial = manager->FindOrBuildMaterial("G4_"+materialChoice);
+  G4NistManager* manager = G4NistManager::Instance();
+  crystalMaterial = manager->FindOrBuildMaterial("G4_"+materialChoice);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetWindowMaterial(G4String materialChoice){
   // search the material by its name   
-	G4NistManager* manager = G4NistManager::Instance();
-	windowMaterial = manager->FindOrBuildMaterial("G4_"+materialChoice);
+  G4NistManager* manager = G4NistManager::Instance();
+  windowMaterial = manager->FindOrBuildMaterial("G4_"+materialChoice);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetWallMaterial(G4String materialChoice){
   // search the material by its name   
-	G4NistManager* manager = G4NistManager::Instance();
-	wallMaterial = manager->FindOrBuildMaterial("G4_"+materialChoice);
+  G4NistManager* manager = G4NistManager::Instance();
+  wallMaterial = manager->FindOrBuildMaterial("G4_"+materialChoice);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -415,25 +420,25 @@ void HPGe::SetDeadLayerThick(G4double val){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetShellHalfLength(G4double val){
-   shellHalfLength = val;
+  shellHalfLength = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetEndGap(G4double val){
-   endGap = val;
+  endGap = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetWindowThickness(G4double val){
-   windowThickness = val;
+  windowThickness = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HPGe::SetWallThickness(G4double val){
-   wallThickness = val;
+  wallThickness = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

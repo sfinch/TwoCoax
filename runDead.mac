@@ -1,7 +1,9 @@
 # Macro File
+# Intended to be used with multiRunDead{1,2}.mac
 
 #set deadlayer 
 /TwoCoax/det/HPGe2/setDeadLayer {dl} um
+#update geometry
 /TwoCoax/det/update
 #set file name 
 /TwoCoax/run/fileName eff{dl}um

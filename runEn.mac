@@ -1,4 +1,5 @@
 # Macro File
+# Intended to be used with multiRunEn.mac
 
 #set energy
 /gps/energy {en} keV

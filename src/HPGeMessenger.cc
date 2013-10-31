@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/HPGeMessenger.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HPGeMessenger.hh"
@@ -18,6 +21,7 @@ HPGeMessenger::HPGeMessenger(HPGe* Det)
 
   G4String dir = "/TwoCoax/det/"+Detector->GetName()+"/";
   
+  // directory
   HPGeDir = new G4UIdirectory(dir);
   G4String guid = Detector->GetName()+" detector commands";
   HPGeDir->SetGuidance(guid.c_str());
@@ -145,46 +149,49 @@ HPGeMessenger::~HPGeMessenger()
 void HPGeMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   //materials
-  if( command == CrystalMaterCmd )
-   { Detector->SetCrystalMaterial(newValue);}
-   
-  if( command == WindowMaterCmd )
-   { Detector->SetWindowMaterial(newValue);}
-  
-  if( command == WallMaterCmd )
-   { Detector->SetWallMaterial(newValue);}
+  if (command == CrystalMaterCmd){
+    Detector->SetCrystalMaterial(newValue);
+  }
+  if (command == WindowMaterCmd){
+    Detector->SetWindowMaterial(newValue);
+  }
+  if (command == WallMaterCmd){
+    Detector->SetWallMaterial(newValue);
+  }
   
   //Crystal dimensions
-  if( command == CrystalHalfLengthCmd )
-   { Detector->SetCrystalHalfLength(CrystalHalfLengthCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == CrystalRadCmd )
-   { Detector->SetCrystalRad(CrystalRadCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == CrystalEndRadCmd )
-   { Detector->SetCrystalEndRad(CrystalEndRadCmd->GetNewDoubleValue(newValue));}
-
-  if( command == HoleRadCmd )
-   { Detector->SetHoleRad(HoleRadCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == HoleDepthCmd )
-   { Detector->SetHoleDepth(HoleDepthCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == DeadLayerCmd )
-   { Detector->SetDeadLayerThick(DeadLayerCmd->GetNewDoubleValue(newValue));}
+  if (command == CrystalHalfLengthCmd){
+    Detector->SetCrystalHalfLength(CrystalHalfLengthCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == CrystalRadCmd){
+    Detector->SetCrystalRad(CrystalRadCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == CrystalEndRadCmd){
+    Detector->SetCrystalEndRad(CrystalEndRadCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == HoleRadCmd){
+    Detector->SetHoleRad(HoleRadCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == HoleDepthCmd){
+    Detector->SetHoleDepth(HoleDepthCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == DeadLayerCmd){
+    Detector->SetDeadLayerThick(DeadLayerCmd->GetNewDoubleValue(newValue));
+  }
    
    //Shell Dimensions
-  if( command == ShellHalfLengthCmd )
-   { Detector->SetShellHalfLength(ShellHalfLengthCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == EndGapCmd )
-   { Detector->SetEndGap(EndGapCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WindowThickCmd )
-   { Detector->SetWindowThickness(WindowThickCmd->GetNewDoubleValue(newValue));}
-
-  if( command == WallThickCmd )
-   { Detector->SetWallThickness(WallThickCmd->GetNewDoubleValue(newValue));}
+  if (command == ShellHalfLengthCmd){
+    Detector->SetShellHalfLength(ShellHalfLengthCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == EndGapCmd){
+    Detector->SetEndGap(EndGapCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == WindowThickCmd){
+    Detector->SetWindowThickness(WindowThickCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == WallThickCmd){
+    Detector->SetWallThickness(WallThickCmd->GetNewDoubleValue(newValue));
+  }
    
 }
 

@@ -1,4 +1,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/ZrSample.hh
+// Makes the enriched 96Zr sample
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ZrSample_h
@@ -50,7 +54,6 @@ class ZrSample
      G4Material*        sampleMaterial1;
      G4Material*        sampleMaterial2;
      G4Material*        shellMaterial;
-     G4Material*        defaultMaterial;
      
      G4double           sample1ThickZ;
      G4double           sample1ThickPhi;

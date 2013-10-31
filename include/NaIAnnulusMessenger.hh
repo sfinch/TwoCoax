@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/NaIAnnulusMessenger.hh
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef NaIAnnulusMessenger_h
@@ -20,7 +23,7 @@ class NaIAnnulusMessenger: public G4UImessenger
 {
   public:
     NaIAnnulusMessenger(NaIAnnulus* );
-   ~NaIAnnulusMessenger();
+    ~NaIAnnulusMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
@@ -28,14 +31,14 @@ class NaIAnnulusMessenger: public G4UImessenger
     NaIAnnulus* Detector;
     
     G4UIdirectory*             NaIAnnulusDir;
-	//materials
+    //materials
     G4UIcmdWithAString*        CrystalMaterCmd;
     G4UIcmdWithAString*        WallMaterCmd;
-	//Crystal Dimensions
+    //Crystal Dimensions
     G4UIcmdWithADoubleAndUnit* CrystalHalfLengthCmd;
     G4UIcmdWithADoubleAndUnit* CrystalInRadCmd;
     G4UIcmdWithADoubleAndUnit* CrystalOutRadCmd;
-	//Shell dimensions
+    //Shell dimensions
     G4UIcmdWithADoubleAndUnit* WallInThickCmd;
     G4UIcmdWithADoubleAndUnit* WallOutThickCmd;
 };

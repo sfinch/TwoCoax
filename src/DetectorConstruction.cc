@@ -1,3 +1,8 @@
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......  
+//
+// src/DetectorConstruction.cc
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......  
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -23,17 +28,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......  
 DetectorConstruction::DetectorConstruction()
-:defaultMaterial(0),
- solidWorld(0),logicWorld(0),physiWorld(0)
+:defaultMaterial(0),solidWorld(0),logicWorld(0),physiWorld(0)
 {
-  detectorDistance = (1.1/2.)*cm; //Mo detector distance
-  //detectorDistance = (1.022/2)*cm; //Zr detector distance
+  //detectorDistance = (1.1/2.)*cm; //Mo detector distance
+  detectorDistance = (1.022/2)*cm; //Zr detector distance
   //detectorDistance = (24.9)*cm; //source detector distance
 
   // materials
   DefineMaterials();
 
-  //initialize detectors
+  //initialize detectors and samples
   HPGeDet[0] = new HPGe("HPGe1");
   HPGeDet[1] = new HPGe("HPGe2");
 
@@ -53,13 +57,13 @@ DetectorConstruction::DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction(){ 
-	delete detectorMessenger;
-	delete HPGeDet[0];
-	delete HPGeDet[1];
-	delete NaIDet;
-	delete MoSamp;
-	delete ZrSamp;
-	delete NdSamp;
+    delete detectorMessenger;
+    delete HPGeDet[0];
+    delete HPGeDet[1];
+    delete NaIDet;
+    delete MoSamp;
+    delete ZrSamp;
+    delete NdSamp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,16 +76,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
 
 void DetectorConstruction::DefineMaterials(){ 
  
-	G4double a, z, density;      //z=mean number of protons;  
-					             //a=mass of a mole;
+    G4double a, z, density;      //z=mean number of protons;  
+                                 //a=mass of a mole;
 
-	// examples of vacuum
-	G4Material* Vacuum =
-	new G4Material("Galactic", z=1., a=1.01*g/mole,density= universe_mean_density,
-	                           kStateGas, 2.73*kelvin, 3.e-18*pascal);
-	
-	//default materials of the World
-	defaultMaterial  = Vacuum;
+    // examples of vacuum
+    G4Material* Vacuum = new G4Material("Galactic", z=1., a=1.01*g/mole, 
+               density=universe_mean_density, kStateGas, 2.73*kelvin, 3.e-18*pascal);
+    
+    //default materials of the World
+    defaultMaterial  = Vacuum;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,48 +101,51 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   ComputeTwoCoaxParameters();
    
   // World
-  solidWorld = new G4Box("World",				//its name
-                   WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
+  solidWorld = new G4Box("World",               //its name
+                   WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);   //its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   defaultMaterial,	//its material
-                                   "World");		//its name
+  logicWorld = new G4LogicalVolume(solidWorld,      //its solid
+                                   defaultMaterial, //its material
+                                   "World");        //its name
                                    
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume				 
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
+  physiWorld = new G4PVPlacement(0,         //no rotation
+                                 G4ThreeVector(),   //at (0,0,0)
+                                 logicWorld,        //its logical volume                 
+                                 "World",       //its name
+                                 0,         //its mother  volume
+                                 false,         //no boolean operation
+                                 0);            //copy number
 
   // HPGe
+  // HPGe placement
   G4ThreeVector *DetPos[2];
   G4RotationMatrix *DetRot[2];
-
   DetPos[0] = new G4ThreeVector(-detectorDistance,0,0);
   DetPos[1] = new G4ThreeVector(detectorDistance,0,0);
   DetRot[0] = new G4RotationMatrix();
   DetRot[0]->rotateX(180*deg);
   DetRot[1] = new G4RotationMatrix();
 
+  // build HPGes
   HPGeDet[1]->BuildHPGe(logicWorld, DetPos[1], DetRot[1]);
   HPGeDet[0]->BuildHPGe(logicWorld, DetPos[0], DetRot[0]);
 
-  /*
   // NaI Annulus
+  //placement
   G4ThreeVector *NaIPos = new G4ThreeVector(0,0,0);
   G4RotationMatrix *NaIRot = new G4RotationMatrix();
+  //build
   NaIDet->BuildNaIAnnulus(logicWorld, NaIPos, NaIRot);
-  */
 
   //Sample
+  //placement
   G4ThreeVector *sampPos = new G4ThreeVector(0,0,0);
   G4RotationMatrix *sampRot = new G4RotationMatrix();
 
-  //ZrSamp->BuildSample(logicWorld, sampPos, sampRot);
+  //build sample
+  ZrSamp->BuildSample(logicWorld, sampPos, sampRot);
   //MoSamp->BuildSample(logicWorld, sampPos, sampRot);
-  NdSamp->BuildSample(logicWorld, sampPos, sampRot);
+  //NdSamp->BuildSample(logicWorld, sampPos, sampRot);
 
   PrintTwoCoaxParameters();     
   
@@ -147,7 +153,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
 
   //always return physical world
-  return physiWorld;	//always return the physical World
+  return physiWorld;    //always return the physical World
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

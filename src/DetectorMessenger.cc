@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// src/DetectorMessenger.cc
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
@@ -12,16 +15,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(
-                                           DetectorConstruction* Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
 :Detector(Det)
 { 
   TwoCoaxDir = new G4UIdirectory("/TwoCoax/");
   TwoCoaxDir->SetGuidance("UI commands");
   
+  //directory
   detDir = new G4UIdirectory("/TwoCoax/det/");
   detDir->SetGuidance("detector control");
        
+  // set the detector separation distance command
   DetectorDistanceCmd= new G4UIcmdWithADoubleAndUnit("/TwoCoax/det/setDetectorDistance",this);
   DetectorDistanceCmd->SetGuidance("Set the distance of the detector to the source.");
   DetectorDistanceCmd->SetParameterName("Size",false);
@@ -53,12 +57,15 @@ DetectorMessenger::~DetectorMessenger()
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == DetectorDistanceCmd )
-   { Detector->SetDetectorDistance(DetectorDistanceCmd->GetNewDoubleValue(newValue));}
+  //distance
+  if (command == DetectorDistanceCmd){
+    Detector->SetDetectorDistance(DetectorDistanceCmd->GetNewDoubleValue(newValue));
+  }
 
   //update
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
+  if (command == UpdateCmd){
+    Detector->UpdateGeometry();
+  }
 
 }
 

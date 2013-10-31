@@ -1,4 +1,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/HPGeMessenger.hh
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HPGeMessenger_h
@@ -20,7 +23,7 @@ class HPGeMessenger: public G4UImessenger
 {
   public:
     HPGeMessenger(HPGe* );
-   ~HPGeMessenger();
+    ~HPGeMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
@@ -28,18 +31,18 @@ class HPGeMessenger: public G4UImessenger
     HPGe* Detector;
     
     G4UIdirectory*             HPGeDir;
-	//materials
+    //materials
     G4UIcmdWithAString*        CrystalMaterCmd;
     G4UIcmdWithAString*        WindowMaterCmd;
     G4UIcmdWithAString*        WallMaterCmd;
-	//Crystal Dimensions
+    //Crystal Dimensions
     G4UIcmdWithADoubleAndUnit* CrystalHalfLengthCmd;
     G4UIcmdWithADoubleAndUnit* CrystalRadCmd;
     G4UIcmdWithADoubleAndUnit* CrystalEndRadCmd;
     G4UIcmdWithADoubleAndUnit* HoleRadCmd;
     G4UIcmdWithADoubleAndUnit* HoleDepthCmd;
     G4UIcmdWithADoubleAndUnit* DeadLayerCmd;
-	//Shell dimensions
+    //Shell dimensions
     G4UIcmdWithADoubleAndUnit* ShellHalfLengthCmd;
     G4UIcmdWithADoubleAndUnit* EndGapCmd;
     G4UIcmdWithADoubleAndUnit* WindowThickCmd;

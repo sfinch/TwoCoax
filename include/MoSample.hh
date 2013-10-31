@@ -1,4 +1,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// include/MoSample.hh
+// Creates a 100Mo metal sample
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef MoSample_h
@@ -21,39 +25,41 @@ class MoSample
   public:
   
     MoSample(G4String name);
-   ~MoSample();
+    ~MoSample();
 
   public:
 
-   	 void SetName(G4String);
+    // setters
+    void SetName(G4String);
      
-     void BuildSample(G4LogicalVolume *logWorld,
-					 G4ThreeVector *pos,
-					 G4RotationMatrix *rot);
-     void PrintSampleParameters();
+    void BuildSample(G4LogicalVolume *logWorld,
+                     G4ThreeVector *pos,
+                     G4RotationMatrix *rot);
+    void PrintSampleParameters();
      
   public:
   
-     G4String GetName()					{return name;};
-      
-     const G4VPhysicalVolume* GetSample()   {return physSample;};
+    G4String GetName()                 {return name;};
+
+    const G4VPhysicalVolume* GetSample()   {return physSample;};
 
   private:
 
-     G4String	 	    name;
-     G4LogicalVolume*   logicWorld;
-   	 G4ThreeVector		SamplePos;
-   	 G4RotationMatrix*	SampleRot;
-     
-     G4Material*        sampleMaterial;
-     
-     G4double           sampleThick;
-     G4double           sampleRad;
+    //object properties
+    G4String           name;
+    G4LogicalVolume*   logicWorld;
+    G4ThreeVector      SamplePos;
+    G4RotationMatrix*  SampleRot;
+    
+    G4Material*        sampleMaterial;
+    
+    G4double           sampleThick;
+    G4double           sampleRad;
 
-     
-	 G4VSolid *sample;					//sample
-     G4LogicalVolume *logSample;		//pointer to the logical sample
-     G4VPhysicalVolume *physSample;		//pointer to the physical sample
+    
+    G4VSolid *sample;                  //sample
+    G4LogicalVolume *logSample;        //pointer to the logical sample
+    G4VPhysicalVolume *physSample;     //pointer to the physical sample
 
   private:
     
@@ -65,7 +71,7 @@ class MoSample
 
 inline void MoSample::ComputeMoSampleParameters()
 {
-	
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
