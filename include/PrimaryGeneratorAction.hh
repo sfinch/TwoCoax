@@ -26,32 +26,39 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
     PrimaryGeneratorAction(DetectorConstruction*);    
     virtual ~PrimaryGeneratorAction();
-
-    void GeneratePrimaries(G4Event*);
-
-    //setters
+  
+    // setters
     void SetRndmFlag(G4String val)   { rndmFlag = val;}
     void SetNumGamma(int num);
     void SetPositionR(G4double R)    { positionR = R;}
     void SetEnergy(int num, G4double En);
+  
+    // function
+    void GeneratePrimaries(G4Event*);
+    G4ThreeVector randP();
+    G4ThreeVector randMultipole(G4ThreeVector, int);
 
   private:
+    // object properties
     G4ParticleGun*           particleGun;  //pointer a to G4  class
     DetectorConstruction*    Detector;     //pointer to the geometry
-    G4GeneralParticleSource* particleSource;
-    
-    PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
-    G4String                   rndmFlag;       //flag for a rndm impact point
+      
+    PrimaryGeneratorMessenger* gunMessenger;   //messenger for this class
+    G4String                   rndmFlag;       //flag for switching between gps and gun
 
-    G4int          numGamma;    //number of gammas emmited (max 4)
-    G4double       positionR;   //position in r
-    G4double       energy[4];   //energy of emmited gammas
-
-    // angular distriutions
+    G4int          numGamma;       // max = 4
+    G4double       positionR;
+    G4double       energy[4];
+  
     TF1 *fPDF020;
     TF1 *fPDF420;
-    G4ThreeVector randP();
-    G4ThreeVector randE2(G4ThreeVector);
+    TF1 *fPDF010;
+    TF1 *fPDF120;
+    TF1 *fPDF544;
+    TF1 *fPDF542;
+    TF1 *fPDF442;
+  
+    G4GeneralParticleSource* particleSource;
 
 };
 
