@@ -1,0 +1,15 @@
+# Macro File
+# Runs 1 million events with curent settings
+
+#turn off visulizer
+/vis/disable
+#only print ever 10000 events
+/TwoCoax/event/printModulo 10000
+#gun fires coincident gammas
+/TwoCoax/gun/rndm off
+#gun fires 3 gammas
+/TwoCoax/gun/numGamma 3
+#file name
+/TwoCoax/run/fileName zr_singleB_5420
+#run 4M events
+/run/beamOn 4000000

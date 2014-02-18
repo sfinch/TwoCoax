@@ -28,41 +28,46 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 
   //create a messenger for this class
   gunMessenger = new PrimaryGeneratorMessenger(this);
+  for (int i=0; i<4; i++){
+    energy[i] = 100*keV;
+  }
 
   // Particle gun
-  numGamma = 2;
+  numGamma = 3;
   positionR = 0*cm;
-  // 102Ru
-  energy[0] = 468.58*keV;
-  energy[1] = 475.06*keV;
-  // 96Zr
-  //energy[0] = 369.8*keV;
-  //energy[1] = 778.23*keV;
-  // 150Nd 
-  //energy[0] = 406.51*keV;
-  //energy[1] = 333.96*keV;
-  // 96Nb
-  //energy[0] = 568.9*keV;  //5 -> 4
-  //energy[1] = 241.4*keV;  //4 -> 4
-  //energy[2] = 850*keV;    //4 -> 2
-  //energy[3] = 778.2*keV;  //2 -> 0
-  // 96Nb
-  //energy[0] = 568.9*keV;  //5 -> 4
-  //energy[1] = 371.7*keV;  //4 -> 2
-  //energy[2] = 1497.9*keV; //2 -> 0
-
-  energy[2] = 1*MeV;
-  energy[3] = 1*MeV;
+  if (numGamma == 2){
+    // 102Ru
+    //energy[0] = 468.58*keV;
+    //energy[1] = 475.06*keV;
+    // 96Zr
+    energy[0] = 369.8*keV;
+    energy[1] = 778.23*keV;
+    // 150Nd 
+    //energy[0] = 406.51*keV;
+    //energy[1] = 333.96*keV;
+  }
+  if (numGamma == 3){
+    // 96Nb
+    energy[0] = 568.9*keV;  //5 -> 4
+    energy[1] = 371.7*keV;  //4 -> 2
+    energy[2] = 1497.9*keV; //2 -> 0
+  }
+  if (numGamma == 3){
+    // 96Nb
+    energy[0] = 568.9*keV;  //5 -> 4
+    energy[1] = 241.4*keV;  //4 -> 4
+    energy[2] = 850*keV;    //4 -> 2
+    energy[3] = 778.2*keV;  //2 -> 0
+  }
 
   double pi = 3.141592;
   fPDF020 = new TF1("fPDF020","1.-3.*cos(x)**2+4.*cos(x)**4",0.,pi);             //0 -> 2 -> 0
   fPDF420 = new TF1("fPDF420","1.-(1./8.)*cos(x)**2+(1./24.)*cos(x)**4",0.,pi);  //4 -> 2 -> 0
   fPDF010 = new TF1("fPDF010","1.+cos(x)**2",0.,pi);                             //0 -> 1 -> 0
-  fPDF120 = new TF1("fPDF120","1.-(1./3.)*cos(x)**2",0.,pi);                       //1 -> 2 -> 0
+  fPDF120 = new TF1("fPDF120","1.-(1./3.)*cos(x)**2",0.,pi);                     //1 -> 2 -> 0
   fPDF544 = new TF1("fPDF544","1.+0.1019*cos(x)**2",0.,pi);                      //5 -> 4 -> 4
   fPDF542 = new TF1("fPDF542","1.+0.10319*cos(x)**2",0.,pi);                     //5 -> 4 -> 2
   fPDF442 = new TF1("fPDF542","1.+(1./3.)*cos(x)**2",0.,pi);                     //5 -> 4 -> 2
-
 
   particleGun  = new G4ParticleGun(1);
   
