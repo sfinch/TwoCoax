@@ -26,6 +26,14 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 :Detector(DC),rndmFlag("on")
 {
 
+  pi = 3.141592;
+  sampleWidth = 0;
+  sampleWidth = DC->GetZrSample()->GetActive1Thick();
+  //sampleWidth = DC->GetZrSample()->GetActive2Thick();
+  //G4double sample1OutR = DC->GetZrSample()->GetActive1OutR();
+  //G4double sample2InR  = DC->GetZrSample()->GetActive2InR();
+  //G4double sample2OutR = DC->GetZrSample()->GetActive2OutR();
+
   //create a messenger for this class
   gunMessenger = new PrimaryGeneratorMessenger(this);
   for (int i=0; i<4; i++){
@@ -33,7 +41,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   }
 
   // Particle gun
-  numGamma = 3;
+  numGamma = 2;
   positionR = 0*cm;
   if (numGamma == 2){
     // 102Ru
@@ -46,13 +54,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
     //energy[0] = 406.51*keV;
     //energy[1] = 333.96*keV;
   }
-  if (numGamma == 3){
+  else if (numGamma == 3){
     // 96Nb
     energy[0] = 568.9*keV;  //5 -> 4
     energy[1] = 371.7*keV;  //4 -> 2
     energy[2] = 1497.9*keV; //2 -> 0
   }
-  if (numGamma == 3){
+  else if (numGamma == 4){
     // 96Nb
     energy[0] = 568.9*keV;  //5 -> 4
     energy[1] = 241.4*keV;  //4 -> 4
@@ -60,7 +68,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
     energy[3] = 778.2*keV;  //2 -> 0
   }
 
-  double pi = 3.141592;
   fPDF020 = new TF1("fPDF020","1.-3.*cos(x)**2+4.*cos(x)**4",0.,pi);             //0 -> 2 -> 0
   fPDF420 = new TF1("fPDF420","1.-(1./8.)*cos(x)**2+(1./24.)*cos(x)**4",0.,pi);  //4 -> 2 -> 0
   fPDF010 = new TF1("fPDF010","1.+cos(x)**2",0.,pi);                             //0 -> 1 -> 0
@@ -101,7 +108,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4ThreeVector p[5];
     p[0] = randP();
     //p[0] = G4ThreeVector(1,0,0);  // straight gamma
-    particleGun->SetParticlePosition(G4ThreeVector(0*cm,positionR,0.*cm));
+
+    G4double posX = sampleWidth*(G4UniformRand()-0.5);
+
+    particleGun->SetParticlePosition(G4ThreeVector(posX,positionR,0.*cm));
     //particleGun->SetParticlePosition(G4ThreeVector(0*cm,2.5*cm,-2.5*cm)); // change position
 
     if (numGamma==1){

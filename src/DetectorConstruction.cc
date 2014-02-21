@@ -30,8 +30,8 @@
 DetectorConstruction::DetectorConstruction()
 :defaultMaterial(0),solidWorld(0),logicWorld(0),physiWorld(0)
 {
-  //detectorDistance = (1.1/2.)*cm; //Mo detector distance
-  detectorDistance = (1.022/2)*cm; //Zr detector distance
+  detectorDistance = (1.1/2.)*cm; //Mo detector distance
+  //detectorDistance = (1.022/2)*cm; //Zr detector distance
   //detectorDistance = (24.9)*cm; //source detector distance
 
   // materials

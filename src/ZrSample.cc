@@ -38,15 +38,15 @@ ZrSample::ZrSample(G4String giveName)
   name = giveName;
 
   // default parameter values of the sample
-  sample1ThickZ   = 1.41*mm;
-  sample1ThickPhi = 1.44*mm;
-  sample1Height   = 10.22*mm;
-  sample1OuterPhi = 0.5*31.75*mm;
+  sample1WallThickZ   = 1.41*mm;
+  sample1WallThickPhi = 1.44*mm;
+  sample1Height       = 10.22*mm;
+  sample1OuterR       = 0.5*31.75*mm;
 
-  sample2ThickZ   = 1.57*mm;
-  sample2ThickPhi = 1.31*mm;
-  sample2Height   = 10.07*mm;
-  sample2OuterPhi = 0.5*69.95*mm;
+  sample2WallThickZ   = 1.57*mm;
+  sample2WallThickPhi = 1.31*mm;
+  sample2Height       = 10.07*mm;
+  sample2OuterR       = 0.5*69.95*mm;
   
   ComputeZrSampleParameters();
   
@@ -136,8 +136,8 @@ void ZrSample::BuildSample(G4LogicalVolume *logWorld,
   // Sample 1
   sample1 = new G4Tubs("sample1", //name
             0,  //inner radius
-            sample1OuterPhi-sample1ThickPhi,    //outer radius
-            (sample1Height*.5)-sample1ThickZ, //z half length
+            sample1OuterR-sample1WallThickPhi,    //outer radius
+            (sample1Height*.5)-sample1WallThickZ, //z half length
             0.*deg,         //starting phi
             360.*deg);      //ending phi
   
@@ -155,9 +155,9 @@ void ZrSample::BuildSample(G4LogicalVolume *logWorld,
 
   // Sample 2
   sample2 = new G4Tubs("sample2", //name
-            sample1OuterPhi+sample2ThickPhi,    //inner radius
-            sample2OuterPhi-sample2ThickPhi,    //outer radius
-            (sample2Height*.5)-sample2ThickZ, //z half length
+            sample1OuterR+sample2WallThickPhi,    //inner radius
+            sample2OuterR-sample2WallThickPhi,    //outer radius
+            (sample2Height*.5)-sample2WallThickZ, //z half length
             0.*deg,         //starting phi
             360.*deg);      //ending phi
   
@@ -176,13 +176,13 @@ void ZrSample::BuildSample(G4LogicalVolume *logWorld,
   //shell
   G4VSolid *shell1 = new G4Tubs("shell1", //name
             0,  //inner radius
-            sample1OuterPhi,    //outer radius
+            sample1OuterR,    //outer radius
             sample1Height*.5, //z half length
             0.*deg,         //starting phi
             360.*deg);      //ending phi
   G4VSolid *shell2 = new G4Tubs("shell2", //name
             0,  //inner radius
-            sample2OuterPhi,    //outer radius
+            sample2OuterR,    //outer radius
             sample2Height*.5, //z half length
             0.*deg,         //starting phi
             360.*deg);      //ending phi
@@ -237,15 +237,15 @@ void ZrSample::PrintSampleParameters(){
   G4cout << "\n------------------------------------------------------------"
          << "\n---> Shell is " << shellMaterial->GetName() << "\n" 
          << "---> Sample 1 \n"
-         << sample1ThickZ/mm << "mm Z thickness \n" 
-         << sample1ThickPhi/mm << "mm phi thickness \n" 
+         << sample1WallThickZ/mm << "mm Z thickness \n" 
+         << sample1WallThickPhi/mm << "mm phi thickness \n" 
          << sample1Height/mm << "mm height\n" 
-         << sample1OuterPhi/mm << "mm outer radius\n" 
+         << sample1OuterR/mm << "mm outer radius\n" 
          << "---> Sample 1 \n"
-         << sample2ThickZ/mm << "mm Z thickness \n" 
-         << sample2ThickPhi/mm << "mm phi thickness \n" 
+         << sample2WallThickZ/mm << "mm Z thickness \n" 
+         << sample2WallThickPhi/mm << "mm phi thickness \n" 
          << sample2Height/mm << "mm height\n" 
-         << sample2OuterPhi/mm << "mm outer radius\n" 
+         << sample2OuterR/mm << "mm outer radius\n" 
          << "--->Calculated quantities \n"
          << Samp1Vol/(cm*cm*cm) << " cm^3 sample 1 volume \n"
          << Samp2Vol/(cm*cm*cm) << " cm^3 sample 2 volume \n"

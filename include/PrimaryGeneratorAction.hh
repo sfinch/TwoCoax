@@ -39,9 +39,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ThreeVector randMultipole(G4ThreeVector, int);
 
   private:
+    double pi;
+
     // object properties
     G4ParticleGun*           particleGun;  //pointer a to G4  class
     DetectorConstruction*    Detector;     //pointer to the geometry
+    G4double                 sampleWidth;  // width of the active sample
       
     PrimaryGeneratorMessenger* gunMessenger;   //messenger for this class
     G4String                   rndmFlag;       //flag for switching between gps and gun

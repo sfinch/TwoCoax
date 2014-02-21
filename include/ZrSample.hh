@@ -38,7 +38,12 @@ class ZrSample
      
   public:
   
-     G4String GetName()					{return name;};
+     G4String GetName()					 {return name;};
+     G4double GetActive1Thick()          {return active1Thick;};
+     G4double GetActive2Thick()          {return active2Thick;};
+     G4double GetActive1OutR()           {return active1OutR;};
+     G4double GetActive2InR()            {return active2InR;};
+     G4double GetActive2OutR()           {return active2OutR;};
       
      const G4VPhysicalVolume* GetInnerSample()   {return physSample1;};
      const G4VPhysicalVolume* GetOuterSample()   {return physSample2;};
@@ -55,15 +60,21 @@ class ZrSample
      G4Material*        sampleMaterial2;
      G4Material*        shellMaterial;
      
-     G4double           sample1ThickZ;
-     G4double           sample1ThickPhi;
+     G4double           sample1WallThickZ;
+     G4double           sample1WallThickPhi;
      G4double           sample1Height;
-     G4double           sample1OuterPhi;
+     G4double           sample1OuterR;
 
-     G4double           sample2ThickZ;
-     G4double           sample2ThickPhi;
+     G4double           sample2WallThickZ;
+     G4double           sample2WallThickPhi;
      G4double           sample2Height;
-     G4double           sample2OuterPhi;
+     G4double           sample2OuterR;
+
+     G4double           active1Thick;
+     G4double           active2Thick;
+     G4double           active1OutR;
+     G4double           active2InR;
+     G4double           active2OutR;
      
 	 G4VSolid *sample1;					//Inner Zr disk
      G4LogicalVolume *logSample1;		//pointer to the logical inner disk Zr
@@ -87,7 +98,13 @@ class ZrSample
 
 inline void ZrSample::ComputeZrSampleParameters()
 {
-	
+    active1Thick = sample1Height - 2*sample1WallThickZ;
+    active2Thick = sample2Height - 2*sample2WallThickZ;
+
+    active1OutR = sample1OuterR - sample1WallThickPhi;
+    active2InR  = sample1OuterR + sample2WallThickPhi;
+    active2OutR = sample2OuterR - sample2WallThickPhi;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
