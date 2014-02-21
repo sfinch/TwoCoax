@@ -109,10 +109,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     p[0] = randP();
     //p[0] = G4ThreeVector(1,0,0);  // straight gamma
 
-    G4double posX = sampleWidth*(G4UniformRand()-0.5);
-
-    particleGun->SetParticlePosition(G4ThreeVector(posX,positionR,0.*cm));
-    //particleGun->SetParticlePosition(G4ThreeVector(0*cm,2.5*cm,-2.5*cm)); // change position
+    if (sampleWidth/mm > 0){
+        G4double posX = sampleWidth*(G4UniformRand()-0.5);
+        particleGun->SetParticlePosition(G4ThreeVector(posX,positionR,0.*cm));
+    }
+    else{
+        particleGun->SetParticlePosition(G4ThreeVector(0*cm,positionR,0.*cm));
+    }
 
     if (numGamma==1){
 
