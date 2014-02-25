@@ -5,5 +5,5 @@
 /TwoCoax/gun/positionR {pos} mm 
 #set file name 
 /TwoCoax/run/fileName pos{pos}mm
-#run 1000000 events
+#run 10M events
 /run/beamOn 10000000 

@@ -135,7 +135,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   G4ThreeVector *NaIPos = new G4ThreeVector(0,0,0);
   G4RotationMatrix *NaIRot = new G4RotationMatrix();
   //build
-  NaIDet->BuildNaIAnnulus(logicWorld, NaIPos, NaIRot);
+  //NaIDet->BuildNaIAnnulus(logicWorld, NaIPos, NaIRot);
 
   //Sample
   //placement
@@ -143,7 +143,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   G4RotationMatrix *sampRot = new G4RotationMatrix();
 
   //build sample
-  ZrSamp->BuildSample(logicWorld, sampPos, sampRot);
+  //ZrSamp->BuildSample(logicWorld, sampPos, sampRot);
   //MoSamp->BuildSample(logicWorld, sampPos, sampRot);
   //NdSamp->BuildSample(logicWorld, sampPos, sampRot);
 

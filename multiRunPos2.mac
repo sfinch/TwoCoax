@@ -1,7 +1,4 @@
 # Macro File
-# Loops over postion in r, from 0 to 55 mm in 5 mm steps
-# Written for two HPGes, coincidence eff
-# requires runPos.mac
 
 #turn off visulizer
 /vis/disable
@@ -15,5 +12,6 @@
 #/TwoCoax/det/update
 
 #loop over energy values
-/control/loop runPos.mac pos 0 40 5 
+#/control/loop runPos.mac pos 18 32 2
+/control/loop runPos.mac pos 20 40 10
 

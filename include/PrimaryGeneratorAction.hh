@@ -36,7 +36,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // function
     void GeneratePrimaries(G4Event*);
     G4ThreeVector randP();
-    G4ThreeVector randMultipole(G4ThreeVector, int);
+    G4ThreeVector randMultipole(G4ThreeVector, int, int, int);
 
   private:
     double pi;
@@ -53,14 +53,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double       positionR;
     G4double       energy[4];
   
-    TF1 *fPDF020;
-    TF1 *fPDF420;
-    TF1 *fPDF010;
-    TF1 *fPDF120;
-    TF1 *fPDF544;
-    TF1 *fPDF542;
-    TF1 *fPDF442;
-  
+    TF1 *fPDF[6][6][6];
+
     G4GeneralParticleSource* particleSource;
 
 };
