@@ -34,6 +34,13 @@ DetectorConstruction::DetectorConstruction()
   //detectorDistance = (1.022/2)*cm; //Zr detector distance
   //detectorDistance = (24.9)*cm; //source detector distance
 
+  HPGeFlag[0] = "on";
+  HPGeFlag[1] = "on";
+  NaIFlag = "off";
+  ZrFlag = "on";
+  MoFlag = "off";
+  NdFlag = "off";
+
   // materials
   DefineMaterials();
 
@@ -127,15 +134,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   DetRot[1] = new G4RotationMatrix();
 
   // build HPGes
-  HPGeDet[1]->BuildHPGe(logicWorld, DetPos[1], DetRot[1]);
-  HPGeDet[0]->BuildHPGe(logicWorld, DetPos[0], DetRot[0]);
+  if (HPGeFlag[1]=="on"){
+    HPGeDet[1]->BuildHPGe(logicWorld, DetPos[1], DetRot[1]);
+  }
+  if (HPGeFlag[0]=="on"){
+    HPGeDet[0]->BuildHPGe(logicWorld, DetPos[0], DetRot[0]);
+  }
 
   // NaI Annulus
   //placement
   G4ThreeVector *NaIPos = new G4ThreeVector(0,0,0);
   G4RotationMatrix *NaIRot = new G4RotationMatrix();
   //build
-  //NaIDet->BuildNaIAnnulus(logicWorld, NaIPos, NaIRot);
+  if (NaIFlag=="on"){
+    NaIDet->BuildNaIAnnulus(logicWorld, NaIPos, NaIRot);
+  }
 
   //Sample
   //placement
@@ -143,9 +156,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   G4RotationMatrix *sampRot = new G4RotationMatrix();
 
   //build sample
-  //ZrSamp->BuildSample(logicWorld, sampPos, sampRot);
-  //MoSamp->BuildSample(logicWorld, sampPos, sampRot);
-  //NdSamp->BuildSample(logicWorld, sampPos, sampRot);
+  if (ZrFlag=="on"){
+    ZrSamp->BuildSample(logicWorld, sampPos, sampRot);
+  }
+  else if (MoFlag=="on"){
+    MoSamp->BuildSample(logicWorld, sampPos, sampRot);
+  }
+  else if (NdFlag=="on"){
+    NdSamp->BuildSample(logicWorld, sampPos, sampRot);
+  }
 
   PrintTwoCoaxParameters();     
   

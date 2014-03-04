@@ -28,10 +28,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual ~PrimaryGeneratorAction();
   
     // setters
-    void SetRndmFlag(G4String val)   { rndmFlag = val;}
+    void SetRndmFlag(G4String val)   {rndmFlag = val;}
+    void SetPositionR(G4double R)    {positionR = R;}
     void SetNumGamma(int num);
-    void SetPositionR(G4double R)    { positionR = R;}
     void SetEnergy(int num, G4double En);
+    void SetSpin(int num, int j);
+    void SetEnSpin(int num, G4double En, int j);
   
     // function
     void GeneratePrimaries(G4Event*);
@@ -52,6 +54,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4int          numGamma;       // max = 4
     G4double       positionR;
     G4double       energy[4];
+    G4double       spin[4];
   
     TF1 *fPDF[6][6][6];
 
@@ -65,6 +68,25 @@ inline void PrimaryGeneratorAction::SetEnergy(int num, G4double En)
 { 
   if ((num>=0)&&(num<4)){
     energy[num] = En;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void PrimaryGeneratorAction::SetSpin(int num, int j)
+{ 
+  if ((num>=0)&&(num<4)){
+    spin[num] = j;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void PrimaryGeneratorAction::SetEnSpin(int num, G4double En, int j)
+{ 
+  if ((num>=0)&&(num<4)){
+    energy[num] = En;
+    spin[num] = j;
   }
 }
 

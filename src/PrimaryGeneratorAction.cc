@@ -38,12 +38,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   gunMessenger = new PrimaryGeneratorMessenger(this);
   for (int i=0; i<4; i++){
     energy[i] = 100*keV;
+    spin[i] = 0;
   }
 
   // Particle gun
   numGamma = 2;
   positionR = 0*cm;
   if (numGamma == 2){
+    spin[0] = 0;
+    spin[1] = 2;
     // 102Ru
     energy[0] = 468.58*keV;
     energy[1] = 475.06*keV;
@@ -56,12 +59,19 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   }
   else if (numGamma == 3){
     // 96Nb
+    spin[0] = 5;
+    spin[1] = 4;
+    spin[2] = 2;
     energy[0] = 568.9*keV;  //5 -> 4
     energy[1] = 371.7*keV;  //4 -> 2
     energy[2] = 1497.9*keV; //2 -> 0
   }
   else if (numGamma == 4){
     // 96Nb
+    spin[0] = 5;
+    spin[1] = 4;
+    spin[2] = 4;
+    spin[3] = 2;
     energy[0] = 568.9*keV;  //5 -> 4
     energy[1] = 241.4*keV;  //4 -> 4
     energy[2] = 850*keV;    //4 -> 2
@@ -109,7 +119,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction() { delete particleGun;
+PrimaryGeneratorAction::~PrimaryGeneratorAction() { 
+  delete particleGun;
   delete gunMessenger;
   delete particleSource;
 }

@@ -50,6 +50,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     // Setters
     void SetDetectorDistance (G4double);     
 
+    void SetHPGeFlag(int det, G4String val);
+    void SetNaIFlag(G4String val)      {NaIFlag = val;};
+    void SetZrFlag(G4String val)       {ZrFlag  = val;};
+    void SetMoFlag(G4String val)       {MoFlag  = val;};
+    void SetNdFlag(G4String val)       {NdFlag  = val;};
+
     // Getters
     G4double GetWorldSizeX()           {return WorldSizeX;}; 
     G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
@@ -65,13 +71,20 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   private:
      
-    // Objects places in the detector
+    // Objects placed in the detector
     G4double           detectorDistance;
     HPGe*              HPGeDet[2];
     NaIAnnulus*        NaIDet;
     ZrSample*          ZrSamp;
     MoSample*          MoSamp;
     NdSample*          NdSamp;
+
+    // flags to build det objects
+    G4String           HPGeFlag[2];
+    G4String           NaIFlag;
+    G4String           ZrFlag;
+    G4String           MoFlag;
+    G4String           NdFlag;
 
     // World properties
     G4Material*        defaultMaterial;
@@ -119,6 +132,13 @@ inline HPGe* DetectorConstruction::GetHPGe(G4int det)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void DetectorConstruction::SetHPGeFlag(int det, G4String val)
+{
+  if (det==0 || det==1){ 
+    HPGeFlag[det] = val;
+  }
+}
 
 #endif
 

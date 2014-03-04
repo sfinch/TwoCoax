@@ -23,8 +23,7 @@ RunActionMessenger::RunActionMessenger(RunAction* RunAct)
   // command to change file name
   fileNameCmd= new G4UIcmdWithAString("/TwoCoax/run/fileName",this);
   fileNameCmd->SetGuidance("Give a filename to save to.");
-  fileNameCmd->SetParameterName("choice",true);
-  fileNameCmd->SetDefaultValue("simulated.dat");
+  fileNameCmd->SetDefaultValue("simulated");
   fileNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
 }

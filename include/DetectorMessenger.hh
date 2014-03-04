@@ -33,8 +33,16 @@ class DetectorMessenger: public G4UImessenger
     //Directories
     G4UIdirectory*             TwoCoaxDir;
     G4UIdirectory*             detDir;
+
     //Set separation distance between detectors
     G4UIcmdWithADoubleAndUnit* DetectorDistanceCmd;
+
+    G4UIcmdWithAString*        HPGeCmd[2];
+    G4UIcmdWithAString*        NaICmd;
+    G4UIcmdWithAString*        ZrCmd;
+    G4UIcmdWithAString*        MoCmd;
+    G4UIcmdWithAString*        NdCmd;
+
     //update
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
