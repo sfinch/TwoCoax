@@ -33,7 +33,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4VPhysicalVolume* volume 
   = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
   
-  // collect energy and track length step by step
+  // collect energy step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
   
   if (volume == detector->GetHPGe(0)->GetCrystal()) eventaction->AddEn(0,edep);

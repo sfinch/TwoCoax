@@ -22,22 +22,25 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-//:Detector(DC),rndmFlag("off")
 :Detector(DC),rndmFlag("on")
 {
 
   pi = 3.141592;
   sampleWidth = 0;
-  //sampleWidth = DC->GetZrSample()->GetActive1Thick();
-  //sampleWidth = DC->GetZrSample()->GetActive2Thick();
-  //G4double sample1OutR = DC->GetZrSample()->GetActive1OutR();
-  //G4double sample2InR  = DC->GetZrSample()->GetActive2InR();
-  //G4double sample2OutR = DC->GetZrSample()->GetActive2OutR();
+  if (DC->GetZrFlag() == "on"){
+    //sampleWidth = DC->GetZrSample()->GetActive1Thick();
+    //sampleWidth = DC->GetZrSample()->GetActive2Thick();
+    //G4double sample1OutR = DC->GetZrSample()->GetActive1OutR();
+    //G4double sample2InR  = DC->GetZrSample()->GetActive2InR();
+    //G4double sample2OutR = DC->GetZrSample()->GetActive2OutR();
+  }
 
   //create a messenger for this class
   gunMessenger = new PrimaryGeneratorMessenger(this);
   for (int i=0; i<4; i++){
     energy[i] = 100*keV;
+  }
+  for (int i=0; i<5; i++){
     spin[i] = 0;
   }
 
@@ -130,12 +133,13 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
-
+  
+  // custom event generator
   if (rndmFlag == "off"){
     G4ThreeVector p[5];
     p[0] = randP();
-    //p[0] = G4ThreeVector(1,0,0);  // straight gamma
 
+    //randomize position in x (if wanted)
     if (sampleWidth/mm > 0){
         G4double posX = sampleWidth*(G4UniformRand()-0.5);
         particleGun->SetParticlePosition(G4ThreeVector(posX,positionR,0.*cm));
@@ -144,23 +148,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         particleGun->SetParticlePosition(G4ThreeVector(0*cm,positionR,0.*cm));
     }
 
-    if (numGamma==1){
-
-    }
-    else if (numGamma==2){
-      p[1] = randMultipole(p[0],0,2,0);
-      //p[1] = randMultipole(p[0],0,1,0);
-    }
-    else if (numGamma==3){
-      p[1] = randMultipole(p[0],5,4,2);
-      p[2] = randMultipole(p[1],4,2,0);
-    }
-    else if (numGamma==4){
-      p[1] = randMultipole(p[0],5,4,4);
-      p[2] = randMultipole(p[1],4,4,2);
-      p[3] = randMultipole(p[2],4,2,0);
+    //calculate multipole radiation angular distribution
+    for (int i=1; i<numGamma; i++){
+      p[i] = randMultipole(p[i-1],spin[i-1], spin[i], spin[i+1]);
     }
 
+    //start the gun
     for (int i=0; i<numGamma; i++){
       particleGun->SetParticleMomentumDirection(p[i]);
       particleGun->SetParticleEnergy(energy[i]);
@@ -168,6 +161,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
   }
 
+  // GPS
   if (rndmFlag == "on"){
     particleSource->GeneratePrimaryVertex(anEvent);
   }

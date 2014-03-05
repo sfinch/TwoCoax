@@ -61,6 +61,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
     G4double GetDetectorDistance()     {return detectorDistance;};
 
+    G4String GetHPGeFlag(int det);
+    G4String GetNaIFlag()              {return NaIFlag;};
+    G4String GetZrFlag()               {return ZrFlag;};
+    G4String GetMoFlag()               {return MoFlag;};
+    G4String GetNdFlag()               {return NdFlag;};
+
     HPGe* GetHPGe(G4int det);
     NaIAnnulus* GetNaIAnnulus()        {return NaIDet;};
     ZrSample* GetZrSample()            {return ZrSamp;};
@@ -129,6 +135,17 @@ inline HPGe* DetectorConstruction::GetHPGe(G4int det)
   }
   else
     return NULL;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4String DetectorConstruction::GetHPGeFlag(G4int det)
+{
+  if (det==0 || det==1){ 
+    return HPGeFlag[det];
+  }
+  else
+    return "";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

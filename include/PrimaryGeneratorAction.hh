@@ -54,7 +54,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4int          numGamma;       // max = 4
     G4double       positionR;
     G4double       energy[4];
-    G4double       spin[4];
+    G4double       spin[5];
   
     TF1 *fPDF[6][6][6];
 
@@ -75,7 +75,7 @@ inline void PrimaryGeneratorAction::SetEnergy(int num, G4double En)
 
 inline void PrimaryGeneratorAction::SetSpin(int num, int j)
 { 
-  if ((num>=0)&&(num<4)){
+  if ((num>=0)&&(num<5)){
     spin[num] = j;
   }
 }
