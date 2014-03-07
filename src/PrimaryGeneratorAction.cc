@@ -219,3 +219,20 @@ G4ThreeVector PrimaryGeneratorAction::randMultipole(G4ThreeVector P, int m1, int
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PrimaryGeneratorAction::PrintGunParameters(){
+  G4cout << "\n------------------------------------------------------------"
+         << "\n---> Rndm flag (on is GPS, off is custom): " <<  rndmFlag  
+         << "\n---> R Position:       " << positionR/cm << " cm"
+         << "\n---> Sample width:     " << sampleWidth/cm << " cm"
+         << "\n---> Number of gammas: " << numGamma << ""
+         << "\n---> Level scheme: " << "\n";
+  for (int i=0; i<numGamma; i++){
+    G4cout << "       ----- " << spin[i] << "\n"
+           << "        | " << energy[i]/keV << " keV\n";
+  }
+  G4cout << "       ----- " << spin[numGamma]
+         << "\n------------------------------------------------------------\n";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

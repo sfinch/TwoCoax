@@ -37,6 +37,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   
     // function
     void GeneratePrimaries(G4Event*);
+
+    void PrintGunParameters();
+
     G4ThreeVector randP();
     G4ThreeVector randMultipole(G4ThreeVector, int, int, int);
 

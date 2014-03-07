@@ -7,7 +7,9 @@
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "PrimaryGeneratorAction.hh"
+
 #include "G4UIdirectory.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -64,7 +66,12 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun
     spinCmd[i]->SetRange("Number>=0&&Number<6");
     spinCmd[i]->AvailableForStates(G4State_PreInit,G4State_Idle);
   }
-  
+
+  //print parameters
+  PrintCmd = new G4UIcmdWithoutParameter("/TwoCoax/gun/print",this);
+  PrintCmd->SetGuidance("Print gun parameters");
+  PrintCmd->AvailableForStates(G4State_Idle);
+      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,6 +106,9 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newVa
       Action->SetEnergy(i, energyCmd[i]->GetNewDoubleValue(newValue));
       Action->SetSpin(i, spinCmd[i]->GetNewIntValue(newValue));
     }
+  }
+  if (command == PrintCmd){
+    Action->PrintGunParameters();
   }
 }
 

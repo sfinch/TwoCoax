@@ -12,7 +12,9 @@
 #include "globals.hh"
 
 class PrimaryGeneratorAction;
+
 class G4UIdirectory;
+class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
@@ -37,6 +39,8 @@ class PrimaryGeneratorMessenger: public G4UImessenger
 
     G4UIcmdWithAnInteger*      spinCmd[4];
     G4UIcmdWithADoubleAndUnit* energyCmd[4];
+
+    G4UIcmdWithoutParameter*   PrintCmd;
   
 };
 
