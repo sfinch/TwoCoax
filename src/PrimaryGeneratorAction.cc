@@ -9,6 +9,9 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
 
+#include <map>
+#include <stdexcept> 
+
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -16,8 +19,9 @@
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
-#include "TF1.h"
 #include "G4GeneralParticleSource.hh"
+
+#include "TF1.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -81,29 +85,29 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
     energy[3] = 778.2*keV;  //2 -> 0
   }
 
-  fPDF[0][2][0] = new TF1("fPDF020","1.-3.*cos(x)**2+4.*cos(x)**4",0.,pi);
-  fPDF[0][1][0] = new TF1("fPDF010","1.+cos(x)**2",0.,pi);
+  fPDF[020] = new TF1("fPDF020","1.-3.*cos(x)**2+4.*cos(x)**4",0.,pi);
+  fPDF[010] = new TF1("fPDF010","1.+cos(x)**2",0.,pi);
 
-  fPDF[1][2][0] = new TF1("fPDF120","1.-(1./3.)*cos(x)**2",0.,pi);
+  fPDF[120] = new TF1("fPDF120","1.-(1./3.)*cos(x)**2",0.,pi);
 
-  fPDF[2][2][0] = new TF1("fPDF220","1.+0.42856*cos(x)**2",0.,pi);
+  fPDF[220] = new TF1("fPDF220","1.+0.42856*cos(x)**2",0.,pi);
 
-  fPDF[3][4][2] = new TF1("fPDF342","1.-0.19696*cos(x)**2",0.,pi);
-  fPDF[3][2][2] = new TF1("fPDF320","1.-0.07314*cos(x)**2",0.,pi);
-  fPDF[3][2][0] = new TF1("fPDF320","1.-0.10318*cos(x)**2",0.,pi);
+  fPDF[342] = new TF1("fPDF342","1.-0.19696*cos(x)**2",0.,pi);
+  fPDF[322] = new TF1("fPDF320","1.-0.07314*cos(x)**2",0.,pi);
+  fPDF[320] = new TF1("fPDF320","1.-0.10318*cos(x)**2",0.,pi);
 
-  fPDF[4][4][4] = new TF1("fPDF444","1.+0.31965*cos(x)**2",0.,pi);
-  fPDF[4][4][2] = new TF1("fPDF542","1.+(1./3.)*cos(x)**2",0.,pi);
-  fPDF[4][3][4] = new TF1("fPDF434","1.+0.02906*cos(x)**2+0.00261*cos(x)**4",0.,pi);
-  fPDF[4][3][2] = new TF1("fPDF432","1.+0.0769*cos(x)**2",0.,pi);
-  fPDF[4][2][2] = new TF1("fPDF422","1.+0.1107*cos(x)**2",0.,pi);
-  fPDF[4][2][0] = new TF1("fPDF420","1.-(1./8.)*cos(x)**2+(1./24.)*cos(x)**4",0.,pi);
+  fPDF[444] = new TF1("fPDF444","1.+0.31965*cos(x)**2",0.,pi);
+  fPDF[442] = new TF1("fPDF542","1.+(1./3.)*cos(x)**2",0.,pi);
+  fPDF[434] = new TF1("fPDF434","1.+0.02906*cos(x)**2+0.00261*cos(x)**4",0.,pi);
+  fPDF[432] = new TF1("fPDF432","1.+0.0769*cos(x)**2",0.,pi);
+  fPDF[422] = new TF1("fPDF422","1.+0.1107*cos(x)**2",0.,pi);
+  fPDF[420] = new TF1("fPDF420","1.-(1./8.)*cos(x)**2+(1./24.)*cos(x)**4",0.,pi);
 
-  fPDF[5][4][4] = new TF1("fPDF544","1.-0.1019*cos(x)**2",0.,pi);
-  fPDF[5][4][3] = new TF1("fPDF543","1.+0.07683*cos(x)**2",0.,pi);
-  fPDF[5][4][2] = new TF1("fPDF542","1.-0.10319*cos(x)**2",0.,pi);
-  fPDF[5][3][4] = new TF1("fPDF534","1.-0.04454*cos(x)**2",0.,pi);
-  fPDF[5][3][2] = new TF1("fPDF532","1.-0.10318*cos(x)**2",0.,pi);
+  fPDF[544] = new TF1("fPDF544","1.-0.1019*cos(x)**2",0.,pi);
+  fPDF[543] = new TF1("fPDF543","1.+0.07683*cos(x)**2",0.,pi);
+  fPDF[542] = new TF1("fPDF542","1.-0.10319*cos(x)**2",0.,pi);
+  fPDF[534] = new TF1("fPDF534","1.-0.04454*cos(x)**2",0.,pi);
+  fPDF[532] = new TF1("fPDF532","1.-0.10318*cos(x)**2",0.,pi);
 
   particleGun  = new G4ParticleGun(1);
   
@@ -199,7 +203,14 @@ G4ThreeVector PrimaryGeneratorAction::randMultipole(G4ThreeVector P, int m1, int
 
   double theta2 = 0;
   double phi2 = 2*3.141592*G4UniformRand();
-  theta2 = fPDF[m1][m2][m3]->GetRandom();
+  int decay = m1*100 + m2*10 + m3;
+  try{
+    theta2 = fPDF.at(decay)->GetRandom();
+  }
+  catch(const std::out_of_range& oor) {
+    G4cout << "ERROR: W(" << decay << ") is not included! Using isotropic distribution." << G4endl;
+    return randP();
+  }
 
   G4RotationMatrix *rot = new G4RotationMatrix();
   rot->rotateY(theta);

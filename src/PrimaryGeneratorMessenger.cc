@@ -11,7 +11,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithAnInteger.hh" 
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,8 +60,8 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun
     energyCmd[i]->SetUnitCategory("Energy");
     energyCmd[i]->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    spinCmd[i] = new G4UIcmdWithAnInteger(dir.c_str(),this);
-    spinCmd[i]->SetGuidance(guid.c_str());
+    spinCmd[i] = new G4UIcmdWithAnInteger(dir2.c_str(),this);
+    spinCmd[i]->SetGuidance(guid2.c_str());
     spinCmd[i]->SetParameterName("Number",false);
     spinCmd[i]->SetRange("Number>=0&&Number<6");
     spinCmd[i]->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -104,6 +104,8 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newVa
   for (int i=0; i<4;i++){
     if (command == energyCmd[i]){
       Action->SetEnergy(i, energyCmd[i]->GetNewDoubleValue(newValue));
+    }
+    if (command == spinCmd[i]){
       Action->SetSpin(i, spinCmd[i]->GetNewIntValue(newValue));
     }
   }

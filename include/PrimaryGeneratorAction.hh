@@ -12,6 +12,7 @@
 #include "G4ThreeVector.hh"
 
 #include "TF1.h"
+#include <map>
 
 class G4ParticleGun;
 class G4GeneralParticleSource;
@@ -59,7 +60,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double       energy[4];
     G4double       spin[5];
   
-    TF1 *fPDF[6][6][6];
+    //TF1 *fPDF[6][6][6];
+    std::map<int,TF1*> fPDF;
 
     G4GeneralParticleSource* particleSource;
 
