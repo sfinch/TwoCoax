@@ -57,7 +57,7 @@ HPGe::HPGe(G4String giveName)
     shellHalfLength = (105./2)*mm;
     endGap = 3.5*mm;
     windowThickness = 2.54*mm;
-    wallThickness = 1.5*mm;
+    wallThickness = (1.5+0.76)*mm;
   }
   
   //HPGe #2
@@ -76,7 +76,7 @@ HPGe::HPGe(G4String giveName)
     shellHalfLength = (105./2)*mm;
     endGap = 4*mm;
     windowThickness = 2.54*mm;
-    wallThickness = 1.5*mm;
+    wallThickness = (1.5+0.76)*mm;
   }
 
   ComputeHPGeParameters();

@@ -15,6 +15,7 @@
 #include "ZrSample.hh"
 #include "MoSample.hh"
 #include "NdSample.hh"
+#include "NatZrSample.hh"
 
 class G4Box;
 class G4VSolid;
@@ -28,6 +29,7 @@ class NaIAnnulus;
 class ZrSample;
 class MoSample;
 class NdSample;
+class NatZrSample;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,6 +57,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetZrFlag(G4String val)       {ZrFlag  = val;};
     void SetMoFlag(G4String val)       {MoFlag  = val;};
     void SetNdFlag(G4String val)       {NdFlag  = val;};
+    void SetNatZrFlag(G4String val)    {NatZrFlag  = val;};
 
     // Getters
     G4double GetWorldSizeX()           {return WorldSizeX;}; 
@@ -66,12 +69,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4String GetZrFlag()               {return ZrFlag;};
     G4String GetMoFlag()               {return MoFlag;};
     G4String GetNdFlag()               {return NdFlag;};
+    G4String GetNatZrFlag()            {return NatZrFlag;};
 
     HPGe* GetHPGe(G4int det);
     NaIAnnulus* GetNaIAnnulus()        {return NaIDet;};
     ZrSample* GetZrSample()            {return ZrSamp;};
     MoSample* GetMoSample()            {return MoSamp;};
     NdSample* GetNdSample()            {return NdSamp;};
+    NatZrSample* GetNatZrSample()      {return NatZrSamp;};
 
     const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
 
@@ -84,6 +89,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     ZrSample*          ZrSamp;
     MoSample*          MoSamp;
     NdSample*          NdSamp;
+    NatZrSample*       NatZrSamp;
 
     // flags to build det objects
     G4String           HPGeFlag[2];
@@ -91,6 +97,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4String           ZrFlag;
     G4String           MoFlag;
     G4String           NdFlag;
+    G4String           NatZrFlag;
 
     // World properties
     G4Material*        defaultMaterial;

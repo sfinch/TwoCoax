@@ -42,6 +42,7 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        ZrCmd;
     G4UIcmdWithAString*        MoCmd;
     G4UIcmdWithAString*        NdCmd;
+    G4UIcmdWithAString*        NatZrCmd;
 
     //update
     G4UIcmdWithoutParameter*   UpdateCmd;

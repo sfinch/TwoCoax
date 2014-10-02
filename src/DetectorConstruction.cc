@@ -30,8 +30,8 @@
 DetectorConstruction::DetectorConstruction()
 :defaultMaterial(0),solidWorld(0),logicWorld(0),physiWorld(0)
 {
-  detectorDistance = (1.1/2.)*cm; //Mo detector distance
-  //detectorDistance = (1.022/2)*cm; //Zr detector distance
+  //detectorDistance = (1.1/2.)*cm; //Mo detector distance
+  detectorDistance = (1.022/2)*cm; //Zr detector distance
   //detectorDistance = (24.9)*cm; //source detector distance
 
   HPGeFlag[0] = "on";
@@ -40,6 +40,7 @@ DetectorConstruction::DetectorConstruction()
   ZrFlag = "on";
   MoFlag = "off";
   NdFlag = "off";
+  NatZrFlag = "off";
 
   // materials
   DefineMaterials();
@@ -53,6 +54,7 @@ DetectorConstruction::DetectorConstruction()
   ZrSamp = new ZrSample("Zr");
   MoSamp = new MoSample("Mo");
   NdSamp = new NdSample("Nd");
+  NatZrSamp = new NatZrSample("NatZr");
   
   // Calculate the world size
   ComputeTwoCoaxParameters();
@@ -65,12 +67,19 @@ DetectorConstruction::DetectorConstruction()
 
 DetectorConstruction::~DetectorConstruction(){ 
     delete detectorMessenger;
+
     delete HPGeDet[0];
     delete HPGeDet[1];
     delete NaIDet;
     delete MoSamp;
     delete ZrSamp;
     delete NdSamp;
+    delete NatZrSamp;
+
+    delete defaultMaterial;
+    delete solidWorld;
+    delete logicWorld;
+    delete physiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,6 +173,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructTwoCoax(){
   }
   else if (NdFlag=="on"){
     NdSamp->BuildSample(logicWorld, sampPos, sampRot);
+  }
+  if (NatZrFlag=="on"){
+    NatZrSamp->BuildSample(logicWorld, sampPos, sampRot);
   }
 
   PrintTwoCoaxParameters();     

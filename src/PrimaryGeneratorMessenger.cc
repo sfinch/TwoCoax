@@ -45,6 +45,13 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun
   PositionRCmd->SetUnitCategory("Length");
   PositionRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  //change the x position of the source
+  PositionXCmd = new G4UIcmdWithADoubleAndUnit("/TwoCoax/gun/positionX",this);
+  PositionXCmd->SetGuidance("Set the position of the source along X");
+  PositionXCmd->SetParameterName("Size",false);
+  PositionXCmd->SetUnitCategory("Length");
+  PositionXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   // change the energy of the gamma (up to 4)
   for (int i=0; i<4;i++){
     G4String dir = "/TwoCoax/gun/energy"+G4UIcommand::ConvertToString(i+1);
@@ -81,6 +88,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete RndmCmd;
   delete numGammaCmd;
   delete PositionRCmd;
+  delete PositionXCmd;
   for (int i=0; i<4;i++){
     delete energyCmd[i];
     delete spinCmd[i];
@@ -100,6 +108,9 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newVa
   }
   if (command == PositionRCmd){
     Action->SetPositionR(PositionRCmd->GetNewDoubleValue(newValue));
+  }
+  if (command == PositionXCmd){
+    Action->SetPositionX(PositionXCmd->GetNewDoubleValue(newValue));
   }
   for (int i=0; i<4;i++){
     if (command == energyCmd[i]){

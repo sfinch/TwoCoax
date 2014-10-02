@@ -31,6 +31,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // setters
     void SetRndmFlag(G4String val)   {rndmFlag = val;}
     void SetPositionR(G4double R)    {positionR = R;}
+    void SetPositionX(G4double X)    {positionX = X;}
     void SetNumGamma(int num);
     void SetEnergy(int num, G4double En);
     void SetSpin(int num, int j);
@@ -51,16 +52,18 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun*           particleGun;  //pointer a to G4  class
     DetectorConstruction*    Detector;     //pointer to the geometry
     G4double                 sampleWidth;  // width of the active sample
+    G4double sampleWidth1, sampleWidth2;
+    G4double sample2InR;
       
     PrimaryGeneratorMessenger* gunMessenger;   //messenger for this class
     G4String                   rndmFlag;       //flag for switching between gps and gun
 
     G4int          numGamma;       // max = 4
     G4double       positionR;
+    G4double       positionX;
     G4double       energy[4];
     G4double       spin[5];
   
-    //TF1 *fPDF[6][6][6];
     std::map<int,TF1*> fPDF;
 
     G4GeneralParticleSource* particleSource;

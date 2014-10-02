@@ -78,6 +78,14 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
   NdCmd->SetCandidates("on off");
   NdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  //switch the Nd sample on/off
+  NatZrCmd = new G4UIcmdWithAString("/TwoCoax/det/NatZr",this);
+  NatZrCmd->SetGuidance("Turn the natZr sample on or off (default)");
+  NatZrCmd->SetParameterName("choice",true);
+  NatZrCmd->SetDefaultValue("off");
+  NatZrCmd->SetCandidates("on off");
+  NatZrCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   //update
   UpdateCmd = new G4UIcmdWithoutParameter("/TwoCoax/det/update",this);
   UpdateCmd->SetGuidance("Update geometry.");
@@ -99,6 +107,7 @@ DetectorMessenger::~DetectorMessenger()
   delete ZrCmd;
   delete MoCmd;
   delete NdCmd;
+  delete NatZrCmd;
 
   delete UpdateCmd;
   delete detDir;
@@ -131,6 +140,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if (command == NdCmd){
     Detector->SetNdFlag(newValue);
+  }
+  if (command == NatZrCmd){
+    Detector->SetNatZrFlag(newValue);
   }
 
   //update

@@ -13,9 +13,9 @@
 #/TwoCoax/det/setDetectorDistance 0.55 cm
 #update
 #/TwoCoax/det/update
+#set position 
+/TwoCoax/gun/positionR 55 mm 
 
 #loop over energy values
-/control/loop runPos.mac pos 0 20 5 
-/control/loop runPos.mac pos 30 40 10 
-/control/loop runPos.mac pos 45 45 10 
+/control/loop runPos.mac pos 15 55 10 
 

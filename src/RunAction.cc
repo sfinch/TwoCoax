@@ -74,7 +74,6 @@ void RunAction::fillPerEvent(double E[])
     maxE = enDep[1];
   }
 
-  
   //accumulate statistic
   if (maxE>200){    // trigger
     //Fill histograms

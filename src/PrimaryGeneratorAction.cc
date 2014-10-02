@@ -30,12 +30,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 {
 
   pi = 3.141592;
-  sampleWidth = 0;
+  sampleWidth = 1;
+  sampleWidth1 = (10.22-(2*1.41))*mm;
+  sampleWidth2 = (10.07-(2*1.57))*mm;
+  sample2InR  = (0.5*31.75 + 1.31)*mm;
   if (DC->GetZrFlag() == "on"){
-    //sampleWidth = DC->GetZrSample()->GetActive1Thick();
-    //sampleWidth = DC->GetZrSample()->GetActive2Thick();
+    sampleWidth1 = DC->GetZrSample()->GetActive1Thick();
+    sampleWidth2 = DC->GetZrSample()->GetActive2Thick();
+    sample2InR  = DC->GetZrSample()->GetActive2InR();
     //G4double sample1OutR = DC->GetZrSample()->GetActive1OutR();
-    //G4double sample2InR  = DC->GetZrSample()->GetActive2InR();
     //G4double sample2OutR = DC->GetZrSample()->GetActive2OutR();
   }
 
@@ -46,32 +49,49 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   }
   for (int i=0; i<5; i++){
     spin[i] = 0;
-  }
-
+  } 
   // Particle gun
   numGamma = 2;
   positionR = 0*cm;
+  positionX = 0*cm;
   if (numGamma == 2){
     spin[0] = 0;
     spin[1] = 2;
     // 102Ru
-    energy[0] = 468.58*keV;
-    energy[1] = 475.06*keV;
+    //energy[0] = 468.58*keV;
+    //energy[1] = 475.06*keV;
     // 96Zr
-    //energy[0] = 369.8*keV;
-    //energy[1] = 778.23*keV;
+    energy[0] = 369.8*keV;
+    energy[1] = 778.23*keV;
     // 150Nd 
     //energy[0] = 406.51*keV;
     //energy[1] = 333.96*keV;
   }
   else if (numGamma == 3){
     // 96Nb
+    // BR = 51.5%
     spin[0] = 5;
     spin[1] = 4;
     spin[2] = 2;
     energy[0] = 568.9*keV;  //5 -> 4
-    energy[1] = 371.7*keV;  //4 -> 2
-    energy[2] = 1497.9*keV; //2 -> 0
+    energy[1] = 1091.3*keV; //4 -> 2
+    energy[2] = 778.2*keV;  //2 -> 0
+    /*
+    // BR = 11.3%
+    spin[0] = 5;
+    spin[1] = 4;
+    spin[2] = 2;
+    energy[0] = 810.8*keV;  //5 -> 4
+    energy[1] = 849.9*keV;  //4 -> 2
+    energy[2] = 778.2*keV;  //2 -> 0
+    // BR = 18.8%
+    spin[0] = 5;
+    spin[1] = 3;
+    spin[2] = 2;
+    energy[0] = 460.0*keV;  //5 -> 4
+    energy[1] = 1200.*keV;  //4 -> 2
+    energy[2] = 778.2*keV;  //2 -> 0
+    */
   }
   else if (numGamma == 4){
     // 96Nb
@@ -85,8 +105,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
     energy[3] = 778.2*keV;  //2 -> 0
   }
 
-  fPDF[020] = new TF1("fPDF020","1.-3.*cos(x)**2+4.*cos(x)**4",0.,pi);
-  fPDF[010] = new TF1("fPDF010","1.+cos(x)**2",0.,pi);
+  fPDF[20] = new TF1("fPDF020","1.-3.*cos(x)**2+4.*cos(x)**4",0.,pi);
+  fPDF[10] = new TF1("fPDF010","1.+cos(x)**2",0.,pi);
 
   fPDF[120] = new TF1("fPDF120","1.-(1./3.)*cos(x)**2",0.,pi);
 
@@ -117,7 +137,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleEnergy(energy[0]);
-  particleGun->SetParticlePosition(G4ThreeVector(0*cm,positionR,0.*cm));
+  particleGun->SetParticlePosition(G4ThreeVector(positionX,positionR,0.*cm));
 
   // Particle source
   particleSource = new G4GeneralParticleSource();
@@ -145,11 +165,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     //randomize position in x (if wanted)
     if (sampleWidth/mm > 0){
+        if (positionR > sample2InR){
+            sampleWidth = sampleWidth2;
+        }
+        else{
+            sampleWidth = sampleWidth1;
+        }
+
         G4double posX = sampleWidth*(G4UniformRand()-0.5);
         particleGun->SetParticlePosition(G4ThreeVector(posX,positionR,0.*cm));
     }
     else{
-        particleGun->SetParticlePosition(G4ThreeVector(0*cm,positionR,0.*cm));
+        particleGun->SetParticlePosition(G4ThreeVector(positionX,positionR,0.*cm));
     }
 
     //calculate multipole radiation angular distribution
@@ -235,6 +262,7 @@ void PrimaryGeneratorAction::PrintGunParameters(){
   G4cout << "\n------------------------------------------------------------"
          << "\n---> Rndm flag (on is GPS, off is custom): " <<  rndmFlag  
          << "\n---> R Position:       " << positionR/cm << " cm"
+         << "\n---> X Position:       " << positionX/cm << " cm"
          << "\n---> Sample width:     " << sampleWidth/cm << " cm"
          << "\n---> Number of gammas: " << numGamma << ""
          << "\n---> Level scheme: " << "\n";

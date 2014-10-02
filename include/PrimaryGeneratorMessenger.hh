@@ -35,6 +35,7 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     G4UIcmdWithAString*     RndmCmd;
 
     G4UIcmdWithADoubleAndUnit* PositionRCmd;
+    G4UIcmdWithADoubleAndUnit* PositionXCmd;
     G4UIcmdWithAnInteger*      numGammaCmd;
 
     G4UIcmdWithAnInteger*      spinCmd[4];

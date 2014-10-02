@@ -1,9 +1,11 @@
 # Macro File
-# Runs 1 million events with curent settings
+# Runs 10 million events with curent settings
 
 #turn off visulizer
 /vis/disable
 #only print ever 10000 events
 /TwoCoax/event/printModulo 10000
-#run 1000000 events
-/run/beamOn 1000000
+#Set to manual gun (not gps)
+/TwoCoax/gun/rndm off
+#run 10M events
+/run/beamOn 10000000

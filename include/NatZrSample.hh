@@ -41,8 +41,6 @@ class NatZrSample
   
     G4String GetName()                 {return name;};
 
-    const G4VPhysicalVolume* GetSample()   {return physSample;};
-
   private:
 
     //object properties
@@ -61,10 +59,13 @@ class NatZrSample
     G4double           sample2RadIn;
     G4double           sample2RadOut;
 
-    
-    G4VSolid *sample;                  //sample
-    G4LogicalVolume *logSample;        //pointer to the logical sample
-    G4VPhysicalVolume *physSample;     //pointer to the physical sample
+    G4VSolid *sample1;                  //sample 1
+    G4LogicalVolume *logSample1;        //pointer to the logical sample 1
+    G4VPhysicalVolume *physSample1;     //pointer to the physical sample 1
+
+    G4VSolid *sample2;                  //sample 2
+    G4LogicalVolume *logSample2;        //pointer to the logical sample 2
+    G4VPhysicalVolume *physSample2;     //pointer to the physical sample 2
 
   private:
     

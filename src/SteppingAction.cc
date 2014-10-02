@@ -36,9 +36,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // collect energy step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
   
-  if (volume == detector->GetHPGe(0)->GetCrystal()) eventaction->AddEn(0,edep);
-  if (volume == detector->GetHPGe(1)->GetCrystal()) eventaction->AddEn(1,edep);
-  if (volume == detector->GetNaIAnnulus()->GetCrystal()) eventaction->AddEn(2,edep);
+  if (volume == detector->GetHPGe(0)->GetCrystal()){
+    eventaction->AddEn(0,edep);
+  }
+  if (volume == detector->GetHPGe(1)->GetCrystal()){
+    eventaction->AddEn(1,edep);
+  }
+  if (volume == detector->GetNaIAnnulus()->GetCrystal()){
+    eventaction->AddEn(2,edep);
+  }
   
   //example of saving random number seed of this event, under condition
   //if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 

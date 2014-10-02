@@ -65,7 +65,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
            << G4BestUnit(EnergyDep[0],"Energy") << G4endl;
     G4cout << "   Total energy deposited in crystal 2: " << std::setw(7)
            << G4BestUnit(EnergyDep[1],"Energy") << G4endl;
-    G4cout << "   Total energy deposited in NaI: " << std::setw(7)
+    G4cout << "   Total energy deposited in NaI:       " << std::setw(7)
            << G4BestUnit(EnergyDep[2],"Energy") << G4endl;
     G4cout << "---> End of event: " << evtNb << G4endl; 
   }
