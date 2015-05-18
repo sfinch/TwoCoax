@@ -39,12 +39,12 @@ NatZrSample::NatZrSample(G4String giveName)
 
   // default parameter values of the sample
   sample1Thick    = 10.*mm;
-  sample1RadIn    = 35.*mm;
-  sample1RadOut   = 50.*mm;
+  sample1RadIn    = 0.*mm;
+  sample1RadOut   = 56.5*0.5*mm;
 
-  sample2Thick    = 110.*mm;
-  sample2RadIn    = 50.*mm;
-  sample2RadOut   = 60.*mm;
+  sample2Thick    = 10.*mm;
+  sample2RadIn    = 70.42*0.5*mm;
+  sample2RadOut   = 99.954*0.5*mm;
 
   ComputeNatZrSampleParameters();
   

@@ -37,7 +37,7 @@ DetectorConstruction::DetectorConstruction()
   HPGeFlag[0] = "on";
   HPGeFlag[1] = "on";
   NaIFlag = "off";
-  ZrFlag = "on";
+  ZrFlag = "off";
   MoFlag = "off";
   NdFlag = "off";
   NatZrFlag = "off";

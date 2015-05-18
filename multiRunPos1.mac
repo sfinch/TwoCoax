@@ -12,6 +12,6 @@
 #/TwoCoax/det/update
 
 #loop over energy values
-#/control/loop runPos.mac pos 0 14 2 
-/control/loop runPos.mac pos 0 15 5 
+/control/loop runPos.mac pos 0 20 5 
+/control/loop runPos.mac pos 40 45 5 
 

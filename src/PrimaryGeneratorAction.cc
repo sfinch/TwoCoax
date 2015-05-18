@@ -30,7 +30,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 {
 
   pi = 3.141592;
-  sampleWidth = 1;
+  sampleWidth = 0;
   sampleWidth1 = (10.22-(2*1.41))*mm;
   sampleWidth2 = (10.07-(2*1.57))*mm;
   sample2InR  = (0.5*31.75 + 1.31)*mm;
@@ -55,13 +55,18 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   positionR = 0*cm;
   positionX = 0*cm;
   if (numGamma == 2){
+    //spin[0] = 2;
     spin[0] = 0;
     spin[1] = 2;
     // 102Ru
     //energy[0] = 468.58*keV;
     //energy[1] = 475.06*keV;
     // 96Zr
-    energy[0] = 369.8*keV;
+    //energy[0] = 369.8*keV; // 0^+_1
+    //energy[0] = 551.8*keV; // 0^+_2
+    //energy[0] = 719.6*keV; // 2^+_2
+    //energy[0] = 847.7*keV; // 2^+_3
+    energy[0] = 1844.25*keV; // 0^+_3
     energy[1] = 778.23*keV;
     // 150Nd 
     //energy[0] = 406.51*keV;
@@ -70,20 +75,23 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
   else if (numGamma == 3){
     // 96Nb
     // BR = 51.5%
+    /*
     spin[0] = 5;
     spin[1] = 4;
     spin[2] = 2;
     energy[0] = 568.9*keV;  //5 -> 4
     energy[1] = 1091.3*keV; //4 -> 2
     energy[2] = 778.2*keV;  //2 -> 0
-    /*
+    */
     // BR = 11.3%
+    /*
     spin[0] = 5;
     spin[1] = 4;
     spin[2] = 2;
     energy[0] = 810.8*keV;  //5 -> 4
     energy[1] = 849.9*keV;  //4 -> 2
     energy[2] = 778.2*keV;  //2 -> 0
+    */
     // BR = 18.8%
     spin[0] = 5;
     spin[1] = 3;
@@ -91,7 +99,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
     energy[0] = 460.0*keV;  //5 -> 4
     energy[1] = 1200.*keV;  //4 -> 2
     energy[2] = 778.2*keV;  //2 -> 0
-    */
   }
   else if (numGamma == 4){
     // 96Nb
